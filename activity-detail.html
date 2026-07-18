@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#ff6b9d">
+  <title>活动详情 - StarMeet</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="logo">
+        <i class="fas fa-heart"></i>
+        <span class="logo-text">
+          <span class="site-name">StarMeet</span>
+          <span class="site-slogan">跨界交友</span>
+        </span>
+      </div>
+      <nav class="tabs">
+        <a class="tab" href="index.html">首页</a>
+        <a class="tab" href="match.html">找缘分</a>
+        <a class="tab" href="activity.html">活动</a>
+        <a class="tab" href="javascript:void(0)" onclick="App.openService()">会员</a>
+      </nav>
+    </header>
+
+    <main class="content">
+      <div class="page active profile-detail-page">
+        <!-- 封面大图 -->
+        <div class="pdp-header">
+          <img id="actCover" src="" alt="活动封面" onerror="avatarFallback(this,'活')">
+          <button class="pdp-back-btn" onclick="location.href='activity.html'"><i class="fas fa-chevron-left"></i></button>
+        </div>
+
+        <!-- 标题行 -->
+        <div class="pdp-name-row">
+          <h1 id="actTitle">活动标题</h1>
+          <span class="pdp-uid" id="actStatus">报名中</span>
+        </div>
+
+        <!-- 信息卡片 -->
+        <div class="act-detail-meta">
+          <div class="act-meta-row"><i class="far fa-clock"></i><div><span class="label">时间</span><span class="val" id="actTime"></span></div></div>
+          <div class="act-meta-row"><i class="fas fa-map-marker-alt"></i><div><span class="label">地点</span><span class="val" id="actLoc"></span></div></div>
+          <div class="act-meta-row"><i class="fas fa-users"></i><div><span class="label">报名</span><span class="val" id="actJoined"></span></div></div>
+          <div class="act-meta-row"><i class="fas fa-tag"></i><div><span class="label">费用</span><span class="val" id="actPrice"></span></div></div>
+        </div>
+
+        <!-- 活动介绍 -->
+        <div class="pdp-section">
+          <div class="pds-title">活动介绍</div>
+          <div id="actIntro" class="act-intro"></div>
+        </div>
+
+        <!-- 活动流程 -->
+        <div class="pdp-section" style="margin-top:14px;">
+          <div class="pds-title">活动流程</div>
+          <ul class="act-schedule" id="actSchedule"></ul>
+        </div>
+
+        <!-- 注意事项 -->
+        <div class="pdp-section" style="margin-top:14px;">
+          <div class="pds-title">注意事项</div>
+          <ul class="act-tips" id="actTips"></ul>
+        </div>
+
+        <!-- 已报名的他们 -->
+        <div class="pdp-suggest">
+          <div class="psug-header"><div class="psug-title">已报名的他们</div></div>
+          <div class="psug-list" id="actParticipants"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 底部操作栏 -->
+    <div class="pdp-bottom-bar">
+      <div class="act-price-box">
+        <span class="act-price-label">报名费用</span>
+        <span class="act-price-val" id="actPriceFoot"></span>
+      </div>
+      <button class="pdb-contact-btn" id="actJoinBtn" onclick="App.openService()"><i class="fas fa-paper-plane"></i> 立即报名</button>
+    </div>
+
+    <div class="fab-container">
+      <a class="fab-btn" onclick="App.sharePage()"><i class="fas fa-share-alt"></i></a>
+      <a class="fab-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-chevron-up"></i></a>
+      <a class="fab-btn" onclick="App.openService()"><i class="fas fa-headset"></i></a>
+    </div>
+
+    <!-- 客服弹窗 -->
+    <div class="modal-mask" id="serviceModal" onclick="if(event.target===this)App.closeService()">
+      <div class="service-card">
+        <button class="modal-close" onclick="App.closeService()"><i class="fas fa-times"></i></button>
+        <div class="service-head"><i class="fas fa-headset"></i><span id="serviceNameVal">StarMeet 客服小助手</span></div>
+        <div class="service-qr"><img id="serviceQrImg" src="" alt="客服微信二维码"></div>
+        <div class="service-tip">长按二维码识别，或添加下方微信号</div>
+        <div class="service-wechat" onclick="App.copyWechat()" title="点击复制">
+          <span class="wx-label">微信号</span>
+          <span class="wx-id" id="serviceWechatVal">StarMeet_KF</span>
+          <i class="fas fa-copy"></i>
+        </div>
+        <div class="service-copy-hint">点击上方微信号即可复制</div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+  </div>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

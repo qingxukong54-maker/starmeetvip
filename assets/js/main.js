@@ -1,0 +1,447 @@
+/* ===========================================================
+   StarMeet 静态模仿站 — 交互脚本
+   =========================================================== */
+(function () {
+  'use strict';
+
+  /* ===========================================================
+     站点配置（按需修改）
+     =========================================================== */
+  const CONFIG = {
+    // 客服微信号（点击即可复制）
+    serviceWechat: 'StarMeet_KF',
+    // 客服昵称
+    serviceName: 'StarMeet 客服小助手',
+    // 客服二维码图片地址（请替换为您真实的客服微信二维码）
+    serviceQr: 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=StarMeet%E5%AE%A2%E6%9C%8D%E5%BE%AE%E4%BF%A1'
+  };
+
+  /* ---------- 全局 App 对象 ---------- */
+  window.App = {
+    toast(msg) {
+      const t = document.getElementById('toast');
+      if (!t) return;
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(this._t);
+      this._t = setTimeout(() => t.classList.remove('show'), 1800);
+    },
+
+    /* ---------- 客服弹窗 ---------- */
+    openService() {
+      const modal = document.getElementById('serviceModal');
+      if (!modal) return;
+      modal.classList.add('show');
+    },
+    closeService() {
+      const modal = document.getElementById('serviceModal');
+      if (modal) modal.classList.remove('show');
+    },
+    copyWechat() {
+      const id = CONFIG.serviceWechat;
+      const done = () => App.toast('微信号已复制：' + id);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(id).then(done).catch(() => fallbackCopy(id, done));
+      } else {
+        fallbackCopy(id, done);
+      }
+    },
+
+  /* ---------- 全局分享 ---------- */
+  sharePage() {
+    const url = location.href;
+    const title = document.title || 'StarMeet';
+    if (navigator.share) {
+      navigator.share({ title: title, url: url }).catch(() => fallbackCopy(url));
+    } else {
+      fallbackCopy(url, () => App.toast('页面链接已复制'));
+    }
+  }
+  };
+
+  /* 复制兜底（非 https / 旧浏览器） */
+  function fallbackCopy(text, cb) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); cb && cb(); }
+    catch (e) { App.toast('复制失败，请手动复制：' + text); }
+    document.body.removeChild(ta);
+  }
+
+  /* ---------- 头像加载失败兜底（渐变 + 首字） ---------- */
+  window.avatarFallback = function (img, name) {
+    const ch = (name || '?').trim().charAt(0) || '?';
+    const svg =
+      "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>" +
+      "<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>" +
+      "<stop offset='0' stop-color='#ff5a6e'/><stop offset='1' stop-color='#ff8a3d'/></linearGradient></defs>" +
+      "<rect width='100' height='100' fill='url(#g)'/>" +
+      "<text x='50' y='64' font-size='46' text-anchor='middle' fill='white' font-family='sans-serif'>" + ch + "</text></svg>";
+    img.onerror = null;
+    img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+  };
+
+  /* ---------- 跳转会员详情 ---------- */
+  window.goMember = function () {
+    location.href = 'member.html';
+  };
+
+  /* ---------- 喜欢按钮（主页嘉宾卡片） ---------- */
+  window.likeUser = function (btn) {
+    const liked = btn.classList.toggle('liked');
+    btn.textContent = liked ? '已喜欢' : '喜欢TA';
+    App.toast(liked ? '已表达好感 ❤' : '已取消');
+  };
+
+  /* ---------- 喜欢按钮（找缘分网格） ---------- */
+  window.likeGrid = function (btn) {
+    const liked = btn.classList.toggle('liked');
+    btn.innerHTML = liked
+      ? '<i class="fas fa-heart"></i><span>已喜欢</span>'
+      : '<i class="far fa-heart"></i><span>喜欢TA</span>';
+    App.toast(liked ? '已表达好感 ❤' : '已取消');
+  };
+
+  /* ---------- 喜欢按钮（会员详情页） ---------- */
+  window.likeDetail = function (btn) {
+    const icon = btn.querySelector('i');
+    const label = btn.querySelector('span');
+    const liked = btn.classList.toggle('liked');
+    icon.className = liked ? 'fas fa-heart' : 'far fa-heart';
+    label.textContent = liked ? '已喜欢' : '喜欢Ta';
+    App.toast(liked ? '已表达好感 ❤' : '已取消');
+  };
+
+  /* ---------- 首页轮播（纯图片占位，无文字） ---------- */
+  const DEFAULT_BANNERS = [
+    { type: 'gradient', bg: 'linear-gradient(135deg,#ff5a6e,#ff8a3d)' },
+    { type: 'gradient', bg: 'linear-gradient(135deg,#722ed1,#b37feb)' },
+    { type: 'gradient', bg: 'linear-gradient(135deg,#11998e,#38ef7d)' }
+  ];
+
+  function buildSlide(b) {
+    const slide = document.createElement('div');
+    slide.className = 'banner-slide';
+    if (b.type === 'image') {
+      slide.style.background = '#000';
+      const img = document.createElement('img');
+      img.src = b.src; img.alt = 'banner'; img.className = 'banner-img';
+      slide.appendChild(img);
+    } else {
+      slide.style.background = b.bg || '#ff5a6e';
+    }
+    return slide;
+  }
+
+  function initBanner() {
+    const track = document.getElementById('bannerTrack');
+    const dotsBox = document.getElementById('bannerDots');
+    if (!track) return;
+
+    // 渲染幻灯片（纯图片占位，无文字）
+    track.innerHTML = '';
+    DEFAULT_BANNERS.forEach(b => track.appendChild(buildSlide(b)));
+
+    // 渲染小圆点
+    if (dotsBox) {
+      dotsBox.innerHTML = '';
+      DEFAULT_BANNERS.forEach((_, i) => {
+        const d = document.createElement('span');
+        d.className = 'dot' + (i === 0 ? ' active' : '');
+        dotsBox.appendChild(d);
+      });
+    }
+
+    const slides = track.children;
+    const dots = dotsBox ? dotsBox.children : [];
+    const total = slides.length;
+    if (total <= 1) { if (dotsBox) dotsBox.style.display = 'none'; }
+
+    let current = 0;
+    let timer = null;
+    function startTimer() { if (total > 1) timer = setInterval(go.bind(null, 1), 4000); }
+    function go(dir) {
+      current = (current + dir + total) % total;
+      track.style.transform = 'translateX(-' + (current * 100) + '%)';
+      for (let i = 0; i < dots.length; i++) dots[i].classList.toggle('active', i === current);
+    }
+    if (dotsBox) {
+      for (let i = 0; i < dots.length; i++) {
+        dots[i].addEventListener('click', () => {
+          current = i;
+          track.style.transform = 'translateX(-' + (current * 100) + '%)';
+          for (let j = 0; j < dots.length; j++) dots[j].classList.toggle('active', j === current);
+          clearInterval(timer); startTimer();
+        });
+      }
+    }
+    startTimer();
+  }
+
+  /* ---------- 找缘分 筛选 ---------- */
+  function initMatchFilter() {
+    const bar = document.getElementById('filterBar');
+    const grid = document.getElementById('userGrid');
+    const activeFilters = document.getElementById('activeFilters');
+    if (!bar || !grid) return;
+
+    let curGender = '';
+    let vipOnly = false;
+
+    function apply() {
+      let tag = [];
+      grid.querySelectorAll('.grid-card').forEach(card => {
+        const okG = !curGender || card.dataset.gender === curGender;
+        const okV = !vipOnly || card.dataset.vip;
+        card.style.display = (okG && okV) ? '' : 'none';
+      });
+      if (curGender) tag.push(curGender === '女' ? '找女生' : '找男生');
+      if (vipOnly) tag.push('VIP');
+      if (tag.length) {
+        activeFilters.style.display = 'block';
+        activeFilters.innerHTML = '已筛选：' + tag.join(' · ') + ' <a style="color:var(--primary);margin-left:6px;" onclick="clearMatchFilter()">清除</a>';
+      } else {
+        activeFilters.style.display = 'none';
+      }
+    }
+    window.clearMatchFilter = function () {
+      curGender = ''; vipOnly = false;
+      bar.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      bar.querySelector('.chip[data-gender=""]').classList.add('active');
+      apply();
+    };
+
+    bar.querySelectorAll('.chip').forEach(c => {
+      c.addEventListener('click', () => {
+        if (c.dataset.vip !== undefined) {
+          vipOnly = !vipOnly;
+          c.classList.toggle('active', vipOnly);
+        } else if (c.dataset.gender !== undefined) {
+          bar.querySelectorAll('.chip').forEach(x => { if (x.dataset.vip === undefined) x.classList.remove('active'); });
+          if (curGender === c.dataset.gender) { curGender = ''; c.classList.remove('active'); }
+          else { curGender = c.dataset.gender; c.classList.add('active'); }
+        } else {
+          return; // 筛选按钮（已有 onclick toast）
+        }
+        apply();
+      });
+    });
+
+    // 支持 ?g=女 / ?g=男 快捷预筛
+    const params = new URLSearchParams(location.search);
+    const g = params.get('g');
+    if (g === '女' || g === '男') {
+      const chip = bar.querySelector('.chip[data-gender="' + g + '"]');
+      if (chip) chip.click();
+    }
+  }
+
+  /* ---------- 活动页筛选（视觉高亮） ---------- */
+  function initActivityFilter() {
+    const bar = document.getElementById('actFilterBar');
+    if (!bar) return;
+    const cards = Array.prototype.slice.call(document.querySelectorAll('#actListBox .act-card'));
+    bar.querySelectorAll('.chip').forEach(c => {
+      c.addEventListener('click', () => {
+        bar.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
+        c.classList.add('active');
+        const f = c.dataset.filter; // '' = 全部, 'open' = 报名中, 'ended' = 已结束
+        cards.forEach(card => {
+          const st = card.getAttribute('data-status');
+          const show = (f === '' || (f === 'open' && st === '报名中') || (f === 'ended' && st === '已结束'));
+          card.style.display = show ? '' : 'none';
+        });
+      });
+    });
+  }
+
+  /* ---------- 横向区域：鼠标拖拽滚动（仅桌面端，移动端用原生触摸） ---------- */
+  function initDragScroll() {
+    if (!window.matchMedia || !window.matchMedia('(pointer:fine)').matches) return;
+    document.querySelectorAll('.activity-row').forEach(function (row) {
+      let down = false, startX = 0, startScroll = 0, moved = false;
+      row.addEventListener('pointerdown', function (e) {
+        down = true; moved = false;
+        startX = e.clientX; startScroll = row.scrollLeft;
+        try { row.setPointerCapture(e.pointerId); } catch (_) {}
+      });
+      row.addEventListener('pointermove', function (e) {
+        if (!down) return;
+        const dx = e.clientX - startX;
+        if (Math.abs(dx) > 5) moved = true;
+        row.scrollLeft = startScroll - dx;
+      });
+      const end = function () { down = false; };
+      row.addEventListener('pointerup', end);
+      row.addEventListener('pointercancel', end);
+      // 拖拽后阻止误触卡片跳转
+      row.addEventListener('click', function (e) {
+        if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+      }, true);
+    });
+  }
+
+  /* ---------- 客服弹窗：填充配置 ---------- */
+  function initServiceModal() {
+    const nameEl = document.getElementById('serviceNameVal');
+    const idEl = document.getElementById('serviceWechatVal');
+    const qrEl = document.getElementById('serviceQrImg');
+    if (nameEl) nameEl.textContent = CONFIG.serviceName;
+    if (idEl) idEl.textContent = CONFIG.serviceWechat;
+    if (qrEl) qrEl.src = CONFIG.serviceQr;
+  }
+
+  /* ---------- 活动详情数据 ---------- */
+  const ACTIVITIES = {
+    '1': {
+      title: '周末单身派对 · 外滩源', cover: 'https://i.pravatar.cc/600?img=60',
+      time: '07-20 14:00 - 18:00', loc: '上海 · 外滩源美术馆', joined: 128, price: '免费', priceNum: 0, status: '报名中',
+      intro: '一场属于单身青年的轻松派对。在外滩源的落地玻璃空间里，用游戏和音乐打破陌生感，认识同频的人。现场提供精酿、甜点与互动小游戏，拒绝尴尬的相亲式对坐，让相遇自然发生。',
+      schedule: [
+        { t: '14:00', x: '签到 · 自由交流，领取名牌与破冰卡' },
+        { t: '14:30', x: '破冰游戏：名字接龙 & 兴趣盲盒' },
+        { t: '15:30', x: '主题桌游 / 自由组队聊天' },
+        { t: '17:00', x: '心动互选 & 合影留念' }
+      ],
+      tips: ['请携带本人身份证签到', '活动费用含饮品与小食，不含交通', '现场禁止强迫加微信，尊重彼此边界', '报名后如需取消请提前 24 小时联系客服'],
+      participants: [['王','王梓涵'],['顾','顾辰'],['张','张沐阳'],['刘','刘宇航'],['李','李梦琪']]
+    },
+    '2': {
+      title: '跨界交友晚宴 · 国贸', cover: 'https://i.pravatar.cc/600?img=61',
+      time: '07-25 19:00 - 22:00', loc: '北京 · 国贸大酒店 3F', joined: 86, price: '¥199', priceNum: 199, status: '报名中',
+      intro: '高端私密晚宴，每桌 6-8 人，由主持人引导话题，在精致餐食中深度交流。适合注重生活品质、希望高效认识优质对象的你。着装建议：商务休闲。',
+      schedule: [
+        { t: '19:00', x: '红毯签到 · 香槟迎宾' },
+        { t: '19:30', x: '入席 · 主厨六道式晚宴' },
+        { t: '20:30', x: '圆桌主题分享：我的理想关系' },
+        { t: '21:30', x: '自由社交 & 互换联系方式' }
+      ],
+      tips: ['着装：商务休闲及以上', '费用为晚宴全包，含酒水', '为保证体验，男生女生比例均衡，名额有限', '迟到超过 30 分钟将影响入席'],
+      participants: [['陈','陈一鸣'],['赵','赵思琪'],['孙','孙浩'],['周','周雨彤'],['吴','吴磊']]
+    },
+    '3': {
+      title: '户外徒步相亲 · 西湖', cover: 'https://i.pravatar.cc/600?img=62',
+      time: '07-30 09:00 - 16:00', loc: '杭州 · 西湖风景区', joined: 203, price: '¥99', priceNum: 99, status: '报名中',
+      intro: '用脚步丈量西湖，在山水间放下手机、专注当下。全程约 8 公里，强度适中，沿途设置多个打卡互动点，边走边聊，最自然的相处方式。',
+      schedule: [
+        { t: '09:00', x: '断桥集合 · 分组热身' },
+        { t: '09:30', x: '环湖徒步 · 打卡点互动' },
+        { t: '12:00', x: '湖畔野餐（自带或团购）' },
+        { t: '14:00', x: '双人任务挑战赛' },
+        { t: '16:00', x: '返程 · 心意互投' }
+      ],
+      tips: ['请穿戴舒适运动鞋与防晒', '建议自备饮用水与少量零食', '如遇大雨活动顺延，另行通知', '中途不可擅自离队，注意安全'],
+      participants: [['林','林晓薇'],['黄','黄子轩'],['徐','徐若晗'],['马','马俊'],['朱','朱琳']]
+    },
+    '4': {
+      title: '剧本杀破冰局 · 成都', cover: 'https://i.pravatar.cc/600?img=63',
+      time: '08-02 14:00 - 18:00', loc: '成都 · 太古里沉浸式剧场', joined: 64, price: '¥129', priceNum: 129, status: '报名中',
+      intro: '在推理与角色扮演中快速熟悉彼此。本场为欢乐本，无需经验，DM 全程带本。6 人一车，性别均衡，开 laughs 不打脸，适合社恐友好型交友。',
+      schedule: [
+        { t: '14:00', x: '签到 · 角色分配' },
+        { t: '14:30', x: '沉浸本开场 · 第一轮搜证' },
+        { t: '16:00', x: '圆桌讨论 · 指认凶手' },
+        { t: '17:30', x: '复盘 & 自由加好友' }
+      ],
+      tips: ['建议提前 10 分钟到场', '费用含剧本、茶水与零食', '请勿剧透，文明游戏', '介意悬疑元素的同学可选其他场次'],
+      participants: [['何','何雨泽'],['高','高欣怡'],['罗','罗晨'],['郑','郑爽'],['梁','梁博']]
+    },
+    '5': {
+      title: '海归专场咖啡会 · 深圳', cover: 'https://i.pravatar.cc/600?img=64',
+      time: '08-08 15:00 - 17:30', loc: '深圳 · 福田咖啡美术馆', joined: 47, price: '免费', priceNum: 0, status: '已结束',
+      intro: '专为海外归国单身青年打造的轻松咖啡局。在艺术与咖啡香气中，聊聊留学见闻与归国生活。现场提供精品手冲，氛围松弛，适合深度一对一交流。',
+      schedule: [
+        { t: '15:00', x: '签到 · 手冲品鉴' },
+        { t: '15:30', x: '破冰：30 秒自我介绍' },
+        { t: '16:00', x: '主题圆桌：归国那些事' },
+        { t: '17:00', x: '自由配对聊天' }
+      ],
+      tips: ['免费活动，名额有限先到先得', '请自带水杯更环保', '现场可自愿消费展览门票', '欢迎带留学好友一同参与'],
+      participants: [['谢','谢霆'],['唐','唐艺'],['韩','韩雪'],['冯','冯宇'],['董','董洁']]
+    }
+  };
+
+  function initActivityDetail() {
+    const box = document.getElementById('actTitle');
+    if (!box) return; // 非详情页
+    const params = new URLSearchParams(location.search);
+    const id = params.get('id') || '1';
+    const a = ACTIVITIES[id] || ACTIVITIES['1'];
+    if (!a) return;
+
+    document.title = a.title + ' - StarMeet';
+    const set = (elId, val) => { const e = document.getElementById(elId); if (e) e.textContent = val; };
+    set('actTitle', a.title);
+    set('actStatus', a.status);
+    set('actTime', a.time);
+    set('actLoc', a.loc);
+    set('actJoined', a.joined + ' 人已报名');
+    set('actPrice', a.price);
+    set('actPriceFoot', a.price);
+    const cover = document.getElementById('actCover');
+    if (cover) cover.src = a.cover;
+
+    const intro = document.getElementById('actIntro');
+    if (intro) intro.textContent = a.intro;
+
+    const sch = document.getElementById('actSchedule');
+    if (sch) {
+      sch.innerHTML = '';
+      a.schedule.forEach(s => {
+        const li = document.createElement('li');
+        li.innerHTML = '<span class="t">' + s.t + '</span>' + s.x;
+        sch.appendChild(li);
+      });
+    }
+    const tips = document.getElementById('actTips');
+    if (tips) {
+      tips.innerHTML = '';
+      a.tips.forEach(t => {
+        const li = document.createElement('li');
+        li.textContent = t;
+        tips.appendChild(li);
+      });
+    }
+    const parts = document.getElementById('actParticipants');
+    if (parts && a.participants) {
+      parts.innerHTML = '';
+      a.participants.forEach(p => {
+        const item = document.createElement('a');
+        item.className = 'psug-item';
+        item.href = 'member.html';
+        item.innerHTML = '<div class="psug-avatar"><img src="https://i.pravatar.cc/120?img=' +
+          (p[1].charCodeAt(0) % 70) + '" onerror="avatarFallback(this,\'' + p[0] + '\')"></div>' +
+          '<div class="psug-name">' + p[1] + '</div>';
+        parts.appendChild(item);
+      });
+    }
+
+    // 已结束的活动：底部报名按钮置为不可用
+    const joinBtn = document.getElementById('actJoinBtn');
+    if (joinBtn) {
+      if (a.status === '已结束') {
+        joinBtn.innerHTML = '<i class="fas fa-ban"></i> 报名已结束';
+        joinBtn.classList.add('disabled');
+        joinBtn.onclick = function (e) { e.preventDefault(); App.toast('该活动已结束，敬请关注新活动'); };
+      } else {
+        joinBtn.innerHTML = '<i class="fas fa-paper-plane"></i> 立即报名';
+        joinBtn.classList.remove('disabled');
+        joinBtn.onclick = function () { App.openService(); };
+      }
+    }
+  }
+
+  /* ---------- 启动 ---------- */
+  document.addEventListener('DOMContentLoaded', function () {
+    initBanner();
+    initMatchFilter();
+    initActivityFilter();
+    initDragScroll();
+    initServiceModal();
+    initActivityDetail();
+  });
+})();
