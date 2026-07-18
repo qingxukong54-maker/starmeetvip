@@ -622,7 +622,7 @@
       if (m.birth) fields.push(['出生日期', m.birth]);
       if (m.blood_type) fields.push(['血型', m.blood_type]);
       if (m.weight) fields.push(['体重', m.weight + 'kg']);
-      if (m.wechat) fields.push(['微信号', m.wechat]);
+      if (m.wechat) fields.push(['微信号', '联系客服领取']);
 
       fields.forEach(function (f) {
         var d = document.createElement('div');
@@ -664,7 +664,7 @@
         if (m.expect_height) eFields.push(['期望身高', m.expect_height]);
         if (m.expect_education) eFields.push(['最低学历', m.expect_education]);
         if (m.expect_marriage) eFields.push(['婚况要求', m.expect_marriage]);
-        if (m.expect_income) eFields.push(['最低年薪', m.expect_income + '万']);
+        if (m.expect_income) eFields.push(['最低年薪', (String(m.expect_income).indexOf('万') >= 0 ? m.expect_income : m.expect_income + '万')]);
         if (m.expect_marry_time) eFields.push(['期望结婚时间', m.expect_marry_time]);
 
         eFields.forEach(function (f) {
