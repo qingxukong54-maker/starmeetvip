@@ -115,13 +115,34 @@
       "<text x='120' y='214' font-size='12' text-anchor='middle' fill='#999' font-family='sans-serif'>长按/扫码添加客服</text></svg>";
     return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
   }
-  /* 启动时用本地图替换所有外网头像/封面，避免国内被墙导致图片全丢 */
+  /* 启动时替换所有外网头像/封面：优先用会员详情页的真人照片（按卡片 onclick 的姓名解析），
+     无照片则本地生成 SVG 首字头像，避免国内被墙导致图片全丢 */
   function initImages() {
     document.querySelectorAll('img[onerror^="avatarFallback"]').forEach(function (img) {
-      const m = /avatarFallback\(this,\s*'([^']+)'\)/.exec(img.getAttribute('onerror') || '');
-      const name = m ? m[1] : (img.getAttribute('alt') || '?');
-      img.onerror = null;
-      img.src = avatarURI(name);
+      // 优先从所在卡片的 onclick="goMember('姓名')" 取全名（onerror 里往往只有首字）
+      var fullName = '';
+      var el = img;
+      while (el && el !== document.body) {
+        var oc = el.getAttribute && el.getAttribute('onclick');
+        if (oc) {
+          var mm = /goMember\(\s*'([^']+)'\s*\)/.exec(oc);
+          if (mm) { fullName = mm[1]; break; }
+        }
+        el = el.parentElement;
+      }
+      var fbMatch = /avatarFallback\(this,\s*'([^']+)'\)/.exec(img.getAttribute('onerror') || '');
+      var fbName = fbMatch ? fbMatch[1] : (img.getAttribute('alt') || '?');
+      var name = fullName || fbName;
+      // 该会员是否有真人照片（详情页照片）→ 列表也用同一张，由 CSS object-fit:cover 裁剪缩放
+      var mid = MEMBER_BY_NAME[name];
+      var mem = mid ? MEMBERS[mid] : null;
+      if (mem && mem.photo) {
+        img.onerror = function () { this.onerror = null; this.src = avatarURI(name); };
+        img.src = mem.photo;
+      } else {
+        img.onerror = null;
+        img.src = avatarURI(name);
+      }
     });
     document.querySelectorAll('.act-card > img').forEach(function (img, idx) {
       img.onerror = null;
