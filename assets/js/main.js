@@ -80,7 +80,7 @@
       "<stop offset='0' stop-color='" + c1 + "'/><stop offset='1' stop-color='" + c2 + "'/></linearGradient></defs>" +
       "<rect width='100' height='100' fill='url(#g)'/>" +
       "<text x='50' y='66' font-size='46' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='600'>" + ch + "</text></svg>";
-    return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+    return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
   }
   // 封面：渐变 + 装饰圆
   const COVER_PALETTE = [
@@ -97,7 +97,7 @@
       "<rect width='600' height='320' fill='url(#g)'/>" +
       "<circle cx='470' cy='70' r='120' fill='rgba(255,255,255,0.12)'/>" +
       "<circle cx='120' cy='260' r='90' fill='rgba(255,255,255,0.10)'/></svg>";
-    return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+    return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
   }
   // 兜底（保留以防万一）
   window.avatarFallback = function (img, name) {
@@ -113,7 +113,7 @@
       "<text x='120' y='90' font-size='16' text-anchor='middle' fill='#ff5a6e' font-family='sans-serif'>微信二维码</text>" +
       "<text x='120' y='122' font-size='20' text-anchor='middle' fill='#333' font-family='sans-serif' font-weight='700'>" + (text || '') + "</text>" +
       "<text x='120' y='214' font-size='12' text-anchor='middle' fill='#999' font-family='sans-serif'>长按/扫码添加客服</text></svg>";
-    return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+    return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
   }
   /* 启动时用本地图替换所有外网头像/封面，避免国内被墙导致图片全丢 */
   function initImages() {
