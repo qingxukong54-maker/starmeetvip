@@ -62,18 +62,72 @@
     document.body.removeChild(ta);
   }
 
-  /* ---------- 头像加载失败兜底（渐变 + 首字） ---------- */
-  window.avatarFallback = function (img, name) {
+  /* ---------- 本地生成头像 / 封面（不依赖外网图床，国内可正常显示） ---------- */
+  function hashHue(str) {
+    let h = 0;
+    for (let i = 0; i < (str || '').length; i++) h = (h * 31 + str.charCodeAt(i)) % 360;
+    return h;
+  }
+  // 头像：渐变底 + 姓名首字（支持中文）
+  function avatarURI(name) {
     const ch = (name || '?').trim().charAt(0) || '?';
+    const hue = hashHue(name || '?');
+    const c1 = 'hsl(' + hue + ',68%,60%)';
+    const c2 = 'hsl(' + ((hue + 38) % 360) + ',72%,50%)';
     const svg =
       "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>" +
       "<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>" +
-      "<stop offset='0' stop-color='#ff5a6e'/><stop offset='1' stop-color='#ff8a3d'/></linearGradient></defs>" +
+      "<stop offset='0' stop-color='" + c1 + "'/><stop offset='1' stop-color='" + c2 + "'/></linearGradient></defs>" +
       "<rect width='100' height='100' fill='url(#g)'/>" +
-      "<text x='50' y='64' font-size='46' text-anchor='middle' fill='white' font-family='sans-serif'>" + ch + "</text></svg>";
+      "<text x='50' y='66' font-size='46' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='600'>" + ch + "</text></svg>";
+    return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+  }
+  // 封面：渐变 + 装饰圆
+  const COVER_PALETTE = [
+    ['#ff5a6e', '#ff8a3d'], ['#722ed1', '#b37feb'],
+    ['#11998e', '#38ef7d'], ['#4a9dff', '#37c2ff'], ['#f6c453', '#ff9f43']
+  ];
+  function coverURI(seed) {
+    const i = ((parseInt(seed, 10) || 0) % COVER_PALETTE.length + COVER_PALETTE.length) % COVER_PALETTE.length;
+    const c = COVER_PALETTE[i];
+    const svg =
+      "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 320'>" +
+      "<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>" +
+      "<stop offset='0' stop-color='" + c[0] + "'/><stop offset='1' stop-color='" + c[1] + "'/></linearGradient></defs>" +
+      "<rect width='600' height='320' fill='url(#g)'/>" +
+      "<circle cx='470' cy='70' r='120' fill='rgba(255,255,255,0.12)'/>" +
+      "<circle cx='120' cy='260' r='90' fill='rgba(255,255,255,0.10)'/></svg>";
+    return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+  }
+  // 兜底（保留以防万一）
+  window.avatarFallback = function (img, name) {
     img.onerror = null;
-    img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+    img.src = avatarURI(name);
   };
+  function coverFallback(img) { img.onerror = null; img.src = coverURI(0); }
+  // 客服二维码兜底（外网 qrserver 在国内常被墙，失败时用本地占位）
+  function qrPlaceholder(text) {
+    const svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'>" +
+      "<rect width='240' height='240' rx='12' fill='white'/>" +
+      "<rect x='20' y='20' width='200' height='150' rx='8' fill='#fff3f1' stroke='#ffd2c8'/>" +
+      "<text x='120' y='90' font-size='16' text-anchor='middle' fill='#ff5a6e' font-family='sans-serif'>微信二维码</text>" +
+      "<text x='120' y='122' font-size='20' text-anchor='middle' fill='#333' font-family='sans-serif' font-weight='700'>" + (text || '') + "</text>" +
+      "<text x='120' y='214' font-size='12' text-anchor='middle' fill='#999' font-family='sans-serif'>长按/扫码添加客服</text></svg>";
+    return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+  }
+  /* 启动时用本地图替换所有外网头像/封面，避免国内被墙导致图片全丢 */
+  function initImages() {
+    document.querySelectorAll('img[onerror^="avatarFallback"]').forEach(function (img) {
+      const m = /avatarFallback\(this,\s*'([^']+)'\)/.exec(img.getAttribute('onerror') || '');
+      const name = m ? m[1] : (img.getAttribute('alt') || '?');
+      img.onerror = null;
+      img.src = avatarURI(name);
+    });
+    document.querySelectorAll('.act-card > img').forEach(function (img, idx) {
+      img.onerror = null;
+      img.src = coverURI(idx);
+    });
+  }
 
   /* ---------- 会员数据（数据驱动，?id=编号） ---------- */
   const RAW_MEMBERS = [
@@ -343,13 +397,16 @@
     const qrEl = document.getElementById('serviceQrImg');
     if (nameEl) nameEl.textContent = CONFIG.serviceName;
     if (idEl) idEl.textContent = CONFIG.serviceWechat;
-    if (qrEl) qrEl.src = CONFIG.serviceQr;
+    if (qrEl) {
+      qrEl.onerror = function () { this.onerror = null; this.src = qrPlaceholder(CONFIG.serviceWechat); };
+      qrEl.src = CONFIG.serviceQr;
+    }
   }
 
   /* ---------- 活动详情数据 ---------- */
   const ACTIVITIES = {
     '1': {
-      title: '周末单身派对 · 外滩源', cover: 'https://i.pravatar.cc/600?img=60',
+      title: '周末单身派对 · 外滩源', cover: 0,
       time: '07-20 14:00 - 18:00', loc: '上海 · 外滩源美术馆', joined: 128, price: '免费', priceNum: 0, status: '报名中',
       intro: '一场属于单身青年的轻松派对。在外滩源的落地玻璃空间里，用游戏和音乐打破陌生感，认识同频的人。现场提供精酿、甜点与互动小游戏，拒绝尴尬的相亲式对坐，让相遇自然发生。',
       schedule: [
@@ -362,7 +419,7 @@
       participants: [['王','王梓涵'],['顾','顾辰'],['张','张沐阳'],['刘','刘宇航'],['李','李梦琪']]
     },
     '2': {
-      title: '跨界交友晚宴 · 国贸', cover: 'https://i.pravatar.cc/600?img=61',
+      title: '跨界交友晚宴 · 国贸', cover: 1,
       time: '07-25 19:00 - 22:00', loc: '北京 · 国贸大酒店 3F', joined: 86, price: '¥199', priceNum: 199, status: '报名中',
       intro: '高端私密晚宴，每桌 6-8 人，由主持人引导话题，在精致餐食中深度交流。适合注重生活品质、希望高效认识优质对象的你。着装建议：商务休闲。',
       schedule: [
@@ -375,7 +432,7 @@
       participants: [['陈','陈一鸣'],['赵','赵思琪'],['孙','孙浩'],['周','周雨彤'],['吴','吴磊']]
     },
     '3': {
-      title: '户外徒步相亲 · 西湖', cover: 'https://i.pravatar.cc/600?img=62',
+      title: '户外徒步相亲 · 西湖', cover: 2,
       time: '07-30 09:00 - 16:00', loc: '杭州 · 西湖风景区', joined: 203, price: '¥99', priceNum: 99, status: '报名中',
       intro: '用脚步丈量西湖，在山水间放下手机、专注当下。全程约 8 公里，强度适中，沿途设置多个打卡互动点，边走边聊，最自然的相处方式。',
       schedule: [
@@ -389,7 +446,7 @@
       participants: [['林','林晓薇'],['黄','黄子轩'],['徐','徐若晗'],['马','马俊'],['朱','朱琳']]
     },
     '4': {
-      title: '剧本杀破冰局 · 成都', cover: 'https://i.pravatar.cc/600?img=63',
+      title: '剧本杀破冰局 · 成都', cover: 3,
       time: '08-02 14:00 - 18:00', loc: '成都 · 太古里沉浸式剧场', joined: 64, price: '¥129', priceNum: 129, status: '报名中',
       intro: '在推理与角色扮演中快速熟悉彼此。本场为欢乐本，无需经验，DM 全程带本。6 人一车，性别均衡，开 laughs 不打脸，适合社恐友好型交友。',
       schedule: [
@@ -402,7 +459,7 @@
       participants: [['何','何雨泽'],['高','高欣怡'],['罗','罗晨'],['郑','郑爽'],['梁','梁博']]
     },
     '5': {
-      title: '海归专场咖啡会 · 深圳', cover: 'https://i.pravatar.cc/600?img=64',
+      title: '海归专场咖啡会 · 深圳', cover: 4,
       time: '08-08 15:00 - 17:30', loc: '深圳 · 福田咖啡美术馆', joined: 47, price: '免费', priceNum: 0, status: '已结束',
       intro: '专为海外归国单身青年打造的轻松咖啡局。在艺术与咖啡香气中，聊聊留学见闻与归国生活。现场提供精品手冲，氛围松弛，适合深度一对一交流。',
       schedule: [
@@ -434,7 +491,7 @@
     set('actPrice', a.price);
     set('actPriceFoot', a.price);
     const cover = document.getElementById('actCover');
-    if (cover) cover.src = a.cover;
+    if (cover) cover.src = coverURI(a.cover || 0);
 
     const intro = document.getElementById('actIntro');
     if (intro) intro.textContent = a.intro;
@@ -464,8 +521,7 @@
         const item = document.createElement('a');
         item.className = 'psug-item';
         item.href = 'member.html?id=' + (MEMBER_BY_NAME[p[1]] || '');
-        item.innerHTML = '<div class="psug-avatar"><img src="https://i.pravatar.cc/120?img=' +
-          (p[1].charCodeAt(0) % 70) + '" onerror="avatarFallback(this,\'' + p[0] + '\')"></div>' +
+        item.innerHTML = '<div class="psug-avatar"><img src="' + avatarURI(p[0]) + '" onerror="avatarFallback(this,\'' + p[0] + '\')"></div>' +
           '<div class="psug-name">' + p[1] + '</div>';
         parts.appendChild(item);
       });
@@ -497,9 +553,9 @@
 
     document.title = m.name + ' - StarMeet';
 
-    // 头像
-    box.src = 'https://i.pravatar.cc/600?img=' + m.img;
-    box.onerror = function () { avatarFallback(box, m.name); };
+    // 头像（本地生成，不依赖外网）
+    box.onerror = null;
+    box.src = avatarURI(m.name);
 
     // 昵称 + 性别图标
     const nm = document.getElementById('pdpName');
@@ -566,8 +622,8 @@
         const av = document.createElement('div');
         av.className = 'psug-avatar';
         const im = document.createElement('img');
-        im.src = 'https://i.pravatar.cc/120?img=' + o.img;
-        im.onerror = function () { avatarFallback(im, o.name); };
+        im.onerror = null;
+        im.src = avatarURI(o.name);
         av.appendChild(im);
         const nm2 = document.createElement('div');
         nm2.className = 'psug-name';
@@ -582,6 +638,7 @@
   /* ---------- 启动 ---------- */
   document.addEventListener('DOMContentLoaded', function () {
     initBanner();
+    initImages();
     initMatchFilter();
     initActivityFilter();
     initDragScroll();
