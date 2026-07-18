@@ -9,11 +9,11 @@
      =========================================================== */
   const CONFIG = {
     // 客服微信号（点击即可复制）
-    serviceWechat: 'StarMeet_KF',
+    serviceWechat: 'starmeet_vip',
     // 客服昵称
     serviceName: 'StarMeet 客服小助手',
     // 客服二维码图片地址（请替换为您真实的客服微信二维码）
-    serviceQr: 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=StarMeet%E5%AE%A2%E6%9C%8D%E5%BE%AE%E4%BF%A1'
+    serviceQr: 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=starmeet_vip'
   };
 
   /* ---------- 全局 App 对象 ---------- */

@@ -14,7 +14,7 @@
 ## 设计要点
 - 移动端优先，居中手机列（max-width 480px）
 - 全局「会员」入口 → 客服弹窗（微信二维码 + 可复制微信号）
-- 微信客服号：`StarMeet_KF`（在 `main.js` 的 `CONFIG` 中修改）
+- 微信客服号：`starmeet_vip`（在 `main.js` 的 `CONFIG` 中修改）
 
 ## 本地预览
 直接用浏览器打开 `index.html` 即可（建议手机模式 / 窄窗口）。
