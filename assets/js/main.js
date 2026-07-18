@@ -161,7 +161,8 @@
     { id:28, name:'唐艺',   gender:'女', img:23, age:28, city:'合肥', district:'蜀山区', height:164, zodiac:'天蝎座', job:'钢琴老师', income:'20-30万' },
     { id:29, name:'韩雪',   gender:'女', img:24, age:26, city:'郑州', district:'金水区', height:161, zodiac:'处女座', job:'编辑', income:'10-20万' },
     { id:30, name:'冯宇',   gender:'男', img:25, age:32, city:'大连', district:'中山区', height:179, zodiac:'摩羯座', job:'海员', income:'20-30万' },
-    { id:31, name:'董洁',   gender:'女', img:26, age:30, city:'昆明', district:'五华区', height:165, zodiac:'双鱼座', job:'花艺师', income:'20-30万' }
+    { id:31, name:'董洁',   gender:'女', img:26, age:30, city:'昆明', district:'五华区', height:165, zodiac:'双鱼座', job:'花艺师', income:'20-30万' },
+    { id:32, name:'Yoko',   gender:'女', photo:'assets/images/member-00008.jpg', uid:'00008', birth:'1979-10-01', age:46, blood_type:'O型', weight:60, city:'福州', district:'', height:168, zodiac:'天秤座', job:'销售', income:'10万', marriage:'离异', education:'本科', housing:'无', car:'无', wechat:'15959005052', interests:'美食', intro:'一个人', expect_gender:'男', expect_age:'55-65岁', expect_height:'170-180cm', expect_education:'大专', expect_marriage:'不限', expect_income:'190万', expect_marry_time:'1年内', purpose:'寻找结婚对象', expect_other:'一个人' }
   ];
 
   function buildMember(r) {
@@ -171,20 +172,34 @@
       name: r.name,
       gender: r.gender,
       img: r.img,
+      photo: r.photo || '',
       age: r.age,
       city: r.city,
       district: r.district || '',
       height: r.height,
       zodiac: r.zodiac,
+      blood_type: r.blood_type || '',
+      weight: r.weight || '',
       job: r.job,
       income: r.income,
       marriage: r.marriage || '未婚',
       education: r.education || '本科',
       housing: r.housing || '有(无贷款)',
       car: r.car || '无',
+      wechat: r.wechat || '',
       interests: interests,
       intro: r.intro || ('我是' + r.name + '，来自' + r.city + '，从事' + r.job + '。平时喜欢' + interests + '。希望在这里遇到合拍的你，真诚交友，非诚勿扰～'),
-      uid: r.uid || ('100' + String(247 + r.id * 13))
+      uid: r.uid || ('100' + String(247 + r.id * 13)),
+      birth: r.birth || '',
+      expect_gender: r.expect_gender || '',
+      expect_age: r.expect_age || '',
+      expect_height: r.expect_height || '',
+      expect_education: r.expect_education || '',
+      expect_marriage: r.expect_marriage || '',
+      expect_income: r.expect_income || '',
+      expect_marry_time: r.expect_marry_time || '',
+      purpose: r.purpose || '',
+      expect_other: r.expect_other || ''
     };
   }
 
@@ -553,9 +568,14 @@
 
     document.title = m.name + ' - StarMeet';
 
-    // 头像（本地生成，不依赖外网）
+    // 头像：优先使用真人照片，否则本地生成SVG
     box.onerror = null;
-    box.src = avatarURI(m.name);
+    if (m.photo) {
+      box.src = m.photo;
+      box.onerror = function () { this.src = avatarURI(m.name); };
+    } else {
+      box.src = avatarURI(m.name);
+    }
 
     // 昵称 + 性别图标
     const nm = document.getElementById('pdpName');
@@ -573,8 +593,11 @@
     const tags = document.getElementById('pdpTags');
     if (tags) {
       tags.innerHTML = '';
-      [m.age + '岁', m.height + 'cm', m.zodiac, m.job, m.income].forEach(function (t) {
-        const s = document.createElement('span');
+      var tagList = [m.age + '岁', m.height + 'cm', m.zodiac, m.job, m.income];
+      if (m.blood_type) tagList.push(m.blood_type);
+      if (m.weight) tagList.push(m.weight + 'kg');
+      tagList.forEach(function (t) {
+        var s = document.createElement('span');
         s.className = 'pdp-tag';
         s.textContent = t;
         tags.appendChild(s);
@@ -585,7 +608,7 @@
     const grid = document.getElementById('pdsGrid');
     if (grid) {
       grid.innerHTML = '';
-      const fields = [
+      var fields = [
         ['性别', m.gender],
         ['年龄', m.age + '岁'],
         ['身高', m.height + 'cm'],
@@ -595,13 +618,19 @@
         ['房产信息', m.housing],
         ['车辆信息', m.car]
       ];
+      // 有值的新字段追加
+      if (m.birth) fields.push(['出生日期', m.birth]);
+      if (m.blood_type) fields.push(['血型', m.blood_type]);
+      if (m.weight) fields.push(['体重', m.weight + 'kg']);
+      if (m.wechat) fields.push(['微信号', m.wechat]);
+
       fields.forEach(function (f) {
-        const d = document.createElement('div');
+        var d = document.createElement('div');
         d.className = 'pds-field';
         d.innerHTML = '<span class="label">' + f[0] + '</span><span class="value">' + f[1] + '</span>';
         grid.appendChild(d);
       });
-      const full = document.createElement('div');
+      var full = document.createElement('div');
       full.className = 'pds-field pds-full';
       full.innerHTML = '<span class="label">兴趣爱好</span><span class="value">' + m.interests + '</span>';
       grid.appendChild(full);
@@ -610,6 +639,59 @@
     // 自我介绍
     const intro = document.getElementById('pdpIntro');
     if (intro) intro.textContent = m.intro;
+
+    // 择偶要求（有数据时才显示）
+    const hasExpect = m.expect_gender || m.expect_age || m.expect_height ||
+      m.expect_education || m.expect_marriage || m.expect_income ||
+      m.expect_marry_time || m.purpose || m.expect_other;
+    if (hasExpect) {
+      var pdpSec = document.querySelector('.pdp-tab-panel.active') || document.getElementById('profileTabBasic');
+      if (pdpSec) {
+        var expectDiv = document.createElement('div');
+        expectDiv.className = 'pdp-section';
+        expectDiv.style.marginTop = '14px';
+        var eTitle = document.createElement('div');
+        eTitle.className = 'pds-title';
+        eTitle.textContent = '择偶要求';
+        expectDiv.appendChild(eTitle);
+        var eGrid = document.createElement('div');
+        eGrid.className = 'pds-grid';
+
+        var eFields = [];
+        if (m.purpose) eFields.push(['注册目的', m.purpose]);
+        if (m.expect_gender) eFields.push(['期望性别', m.expect_gender]);
+        if (m.expect_age) eFields.push(['期望年龄', m.expect_age]);
+        if (m.expect_height) eFields.push(['期望身高', m.expect_height]);
+        if (m.expect_education) eFields.push(['最低学历', m.expect_education]);
+        if (m.expect_marriage) eFields.push(['婚况要求', m.expect_marriage]);
+        if (m.expect_income) eFields.push(['最低年薪', m.expect_income + '万']);
+        if (m.expect_marry_time) eFields.push(['期望结婚时间', m.expect_marry_time]);
+
+        eFields.forEach(function (f) {
+          var d = document.createElement('div');
+          d.className = 'pds-field';
+          d.innerHTML = '<span class="label">' + f[0] + '</span><span class="value">' + f[1] + '</span>';
+          eGrid.appendChild(d);
+        });
+        // 其他要求（独占一行）
+        if (m.expect_other) {
+          var efFull = document.createElement('div');
+          efFull.className = 'pds-field pds-full';
+          efFull.innerHTML = '<span class="label">其他要求</span><span class="value">' + m.expect_other + '</span>';
+          eGrid.appendChild(efFull);
+        }
+
+        expectDiv.appendChild(eGrid);
+
+        // 插入到"猜你喜欢"之前
+        var sugBox = document.getElementById('psugList');
+        if (sugBox && sugBox.parentElement) {
+          sugBox.parentElement.parentNode.insertBefore(expectDiv, sugBox.parentElement);
+        } else {
+          pdpSec.appendChild(expectDiv);
+        }
+      }
+    }
 
     // 猜你喜欢（其他会员，最多 5 位）
     const sug = document.getElementById('psugList');
