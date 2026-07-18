@@ -410,10 +410,9 @@ button { font-family: inherit; cursor: pointer; }
 .profile-detail-page { background: var(--bg); }
 .pdp-header {
   position: relative;
-  height: 320px;
   background: var(--gradient-primary);
 }
-.pdp-header > img { width: 100%; height: 100%; object-fit: cover; }
+.pdp-header > img { width: 100%; height: auto; display: block; }
 .pdp-back-btn {
   position: absolute; top: 12px; left: 12px;
   width: 34px; height: 34px; border-radius: 50%;

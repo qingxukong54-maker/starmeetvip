@@ -44,13 +44,14 @@
         <!-- 标签 -->
         <div class="pdp-tags" id="pdpTags"></div>
 
-        <!-- 选项卡 -->
-        <div class="pdp-tabs">
-          <div class="pdp-tab active">资料</div>
+        <!-- 选项卡：资料 / 择偶要求 -->
+        <div class="pdp-tabs" id="pdpTabs">
+          <div class="pdp-tab active" data-tab="basic">资料</div>
+          <div class="pdp-tab" data-tab="expect" id="tabExpectBtn">择偶要求</div>
         </div>
 
         <!-- 资料面板 -->
-        <div class="pdp-tab-panel active" id="profileTabBasic">
+        <div class="pdp-tab-panel active" id="tabBasic">
           <div class="pdp-section">
             <div class="pds-title">基本资料</div>
             <div class="pds-grid" id="pdsGrid"></div>
@@ -60,12 +61,15 @@
             <div class="pds-title">自我介绍</div>
             <div id="pdpIntro" style="background:var(--primary-light);padding:12px;border-radius:10px;font-size:13px;line-height:1.6;color:var(--text);"></div>
           </div>
+        </div>
 
-          <!-- 猜你喜欢 -->
-          <div class="pdp-suggest">
-            <div class="psug-header"><div class="psug-title">猜你喜欢</div></div>
-            <div class="psug-list" id="psugList"></div>
-          </div>
+        <!-- 择偶要求面板 -->
+        <div class="pdp-tab-panel" id="tabExpect"></div>
+
+        <!-- 猜你喜欢（始终显示） -->
+        <div class="pdp-suggest">
+          <div class="psug-header"><div class="psug-title">猜你喜欢</div></div>
+          <div class="psug-list" id="psugList"></div>
         </div>
       </div>
     </main>

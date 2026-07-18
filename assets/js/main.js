@@ -75,7 +75,7 @@
     const c1 = 'hsl(' + hue + ',68%,60%)';
     const c2 = 'hsl(' + ((hue + 38) % 360) + ',72%,50%)';
     const svg =
-      "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>" +
+      "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' width='100' height='100'>" +
       "<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>" +
       "<stop offset='0' stop-color='" + c1 + "'/><stop offset='1' stop-color='" + c2 + "'/></linearGradient></defs>" +
       "<rect width='100' height='100' fill='url(#g)'/>" +
@@ -138,7 +138,7 @@
     { id:5,  name:'周雅婷', gender:'女', img:41, age:31, city:'广州', district:'天河区', height:166, zodiac:'摩羯座', job:'高中教师', income:'20-30万', marriage:'未婚', education:'本科', housing:'有(无贷款)', car:'无', interests:'读书、园艺、旅行', intro:'人民教师，理性温和。喜欢有共同话题、能一起成长的人。' },
     { id:6,  name:'白思琪', gender:'女', img:32, age:26, city:'杭州', district:'滨江区', height:167, zodiac:'水瓶座', job:'自由插画师', income:'10-20万', marriage:'未婚', education:'本科', housing:'租房', car:'无', interests:'绘画、动漫、猫、旅行', intro:'自由插画师，养猫一只。喜欢安静也喜欢远方，想找个能读懂我画的人。' },
     { id:7,  name:'赵欣怡', gender:'女', img:49, age:25, city:'深圳', district:'南山区', height:160, zodiac:'狮子座', job:'新媒体运营', income:'10-20万', marriage:'未婚', education:'本科', housing:'租房', car:'无', interests:'短视频、穿搭、美食', intro:'深圳新媒体女孩，热爱生活热爱分享。期待一个有趣灵魂来双向奔赴。' },
-    { id:8,  name:'孙雨桐', gender:'女', img:33, age:27, city:'南京', district:'鼓楼区', height:164, zodiac:'双鱼座', job:'银行职员', income:'20-30万', marriage:'未婚', education:'硕士', housing:'有(无贷款)', car:'无', interests:'旅行、健身、电影', intro:'银行白领，自律爱运动。希望对方也热爱生活、积极向上。' },
+    { id:32, name:'孙雨桐', gender:'女', img:33, age:27, city:'南京', district:'鼓楼区', height:164, zodiac:'双鱼座', job:'银行职员', income:'20-30万', marriage:'未婚', education:'硕士', housing:'有(无贷款)', car:'无', interests:'旅行、健身、电影', intro:'银行白领，自律爱运动。希望对方也热爱生活、积极向上。' },
     { id:9,  name:'王梓涵', gender:'男', img:15, age:32, city:'北京', district:'朝阳区', height:172, zodiac:'射手座', job:'企业主管', income:'30万以上', marriage:'未婚', education:'硕士', housing:'有(有贷款)', car:'有', interests:'高尔夫、旅行、投资', intro:'互联网企业中层，理性务实。希望找一个独立、聊得来的伴侣。' },
     { id:10, name:'顾辰',   gender:'男', img:12, age:30, city:'北京', district:'海淀区', height:178, zodiac:'天秤座', job:'软件工程师', income:'30万以上', marriage:'未婚', education:'本科', housing:'有(无贷款)', car:'有', interests:'编程、登山、摄影', intro:'程序员但不宅，周末爱登山拍照。想找个能一起看世界的人。' },
     { id:11, name:'张沐阳', gender:'男', img:13, age:33, city:'深圳', district:'福田区', height:180, zodiac:'金牛座', job:'投资人', income:'30万以上', marriage:'未婚', education:'硕士', housing:'有(无贷款)', car:'有', interests:'金融、滑雪、红酒', intro:'投资人，看人很准。希望遇到一个真诚、有自己热爱的人。' },
@@ -162,7 +162,7 @@
     { id:29, name:'韩雪',   gender:'女', img:24, age:26, city:'郑州', district:'金水区', height:161, zodiac:'处女座', job:'编辑', income:'10-20万' },
     { id:30, name:'冯宇',   gender:'男', img:25, age:32, city:'大连', district:'中山区', height:179, zodiac:'摩羯座', job:'海员', income:'20-30万' },
     { id:31, name:'董洁',   gender:'女', img:26, age:30, city:'昆明', district:'五华区', height:165, zodiac:'双鱼座', job:'花艺师', income:'20-30万' },
-    { id:32, name:'Yoko',   gender:'女', photo:'assets/images/member-00008.jpg', uid:'00008', birth:'1979-10-01', age:46, blood_type:'O型', weight:60, city:'福州', district:'', height:168, zodiac:'天秤座', job:'销售', income:'10万', marriage:'离异', education:'本科', housing:'无', car:'无', wechat:'15959005052', interests:'美食', intro:'一个人', expect_gender:'男', expect_age:'55-65岁', expect_height:'170-180cm', expect_education:'大专', expect_marriage:'不限', expect_income:'190万', expect_marry_time:'1年内', purpose:'寻找结婚对象', expect_other:'一个人' }
+    { id:8,  name:'Yoko',   gender:'女', photo:'assets/images/member-00008.jpg', uid:'00008', birth:'1979-10-01', age:46, blood_type:'O型', weight:60, city:'福州', district:'', height:168, zodiac:'天秤座', job:'销售', income:'10万', marriage:'离异', education:'本科', housing:'无', car:'无', wechat:'15959005052', interests:'美食', intro:'一个人', expect_gender:'男', expect_age:'55-65岁', expect_height:'170-180cm', expect_education:'大专', expect_marriage:'不限', expect_income:'190万', expect_marry_time:'1年内', purpose:'寻找结婚对象', expect_other:'一个人' }
   ];
 
   function buildMember(r) {
@@ -189,7 +189,7 @@
       wechat: r.wechat || '',
       interests: interests,
       intro: r.intro || ('我是' + r.name + '，来自' + r.city + '，从事' + r.job + '。平时喜欢' + interests + '。希望在这里遇到合拍的你，真诚交友，非诚勿扰～'),
-      uid: r.uid || ('100' + String(247 + r.id * 13)),
+      uid: r.uid || (String(r.id).padStart(5, '0')),
       birth: r.birth || '',
       expect_gender: r.expect_gender || '',
       expect_age: r.expect_age || '',
@@ -640,60 +640,68 @@
     const intro = document.getElementById('pdpIntro');
     if (intro) intro.textContent = m.intro;
 
-    // 择偶要求（有数据时才显示）
+    // 择偶要求（有数据才显示，填入"择偶要求"Tab；无则隐藏该Tab）
     const hasExpect = m.expect_gender || m.expect_age || m.expect_height ||
       m.expect_education || m.expect_marriage || m.expect_income ||
       m.expect_marry_time || m.purpose || m.expect_other;
-    if (hasExpect) {
-      var pdpSec = document.querySelector('.pdp-tab-panel.active') || document.getElementById('profileTabBasic');
-      if (pdpSec) {
-        var expectDiv = document.createElement('div');
-        expectDiv.className = 'pdp-section';
-        expectDiv.style.marginTop = '14px';
-        var eTitle = document.createElement('div');
-        eTitle.className = 'pds-title';
-        eTitle.textContent = '择偶要求';
-        expectDiv.appendChild(eTitle);
-        var eGrid = document.createElement('div');
-        eGrid.className = 'pds-grid';
+    const expectBtn = document.getElementById('tabExpectBtn');
+    const expectPanel = document.getElementById('tabExpect');
+    if (hasExpect && expectPanel) {
+      expectPanel.innerHTML = '';
+      const eSec = document.createElement('div');
+      eSec.className = 'pdp-section';
+      const eTitle = document.createElement('div');
+      eTitle.className = 'pds-title';
+      eTitle.textContent = '择偶要求';
+      eSec.appendChild(eTitle);
+      const eGrid = document.createElement('div');
+      eGrid.className = 'pds-grid';
 
-        var eFields = [];
-        if (m.purpose) eFields.push(['注册目的', m.purpose]);
-        if (m.expect_gender) eFields.push(['期望性别', m.expect_gender]);
-        if (m.expect_age) eFields.push(['期望年龄', m.expect_age]);
-        if (m.expect_height) eFields.push(['期望身高', m.expect_height]);
-        if (m.expect_education) eFields.push(['最低学历', m.expect_education]);
-        if (m.expect_marriage) eFields.push(['婚况要求', m.expect_marriage]);
-        if (m.expect_income) eFields.push(['最低年薪', (String(m.expect_income).indexOf('万') >= 0 ? m.expect_income : m.expect_income + '万')]);
-        if (m.expect_marry_time) eFields.push(['期望结婚时间', m.expect_marry_time]);
+      const eFields = [];
+      if (m.purpose) eFields.push(['注册目的', m.purpose]);
+      if (m.expect_gender) eFields.push(['期望性别', m.expect_gender]);
+      if (m.expect_age) eFields.push(['期望年龄', m.expect_age]);
+      if (m.expect_height) eFields.push(['期望身高', m.expect_height]);
+      if (m.expect_education) eFields.push(['最低学历', m.expect_education]);
+      if (m.expect_marriage) eFields.push(['婚况要求', m.expect_marriage]);
+      if (m.expect_income) eFields.push(['最低年薪', (String(m.expect_income).indexOf('万') >= 0 ? m.expect_income : m.expect_income + '万')]);
+      if (m.expect_marry_time) eFields.push(['期望结婚时间', m.expect_marry_time]);
 
-        eFields.forEach(function (f) {
-          var d = document.createElement('div');
-          d.className = 'pds-field';
-          d.innerHTML = '<span class="label">' + f[0] + '</span><span class="value">' + f[1] + '</span>';
-          eGrid.appendChild(d);
-        });
-        // 其他要求（独占一行）
-        if (m.expect_other) {
-          var efFull = document.createElement('div');
-          efFull.className = 'pds-field pds-full';
-          efFull.innerHTML = '<span class="label">其他要求</span><span class="value">' + m.expect_other + '</span>';
-          eGrid.appendChild(efFull);
-        }
-
-        expectDiv.appendChild(eGrid);
-
-        // 插入到"猜你喜欢"之前
-        var sugBox = document.getElementById('psugList');
-        if (sugBox && sugBox.parentElement) {
-          sugBox.parentElement.parentNode.insertBefore(expectDiv, sugBox.parentElement);
-        } else {
-          pdpSec.appendChild(expectDiv);
-        }
+      eFields.forEach(function (f) {
+        const d = document.createElement('div');
+        d.className = 'pds-field';
+        d.innerHTML = '<span class="label">' + f[0] + '</span><span class="value">' + f[1] + '</span>';
+        eGrid.appendChild(d);
+      });
+      if (m.expect_other) {
+        const efFull = document.createElement('div');
+        efFull.className = 'pds-field pds-full';
+        efFull.innerHTML = '<span class="label">其他要求</span><span class="value">' + m.expect_other + '</span>';
+        eGrid.appendChild(efFull);
       }
+      eSec.appendChild(eGrid);
+      expectPanel.appendChild(eSec);
+      if (expectBtn) expectBtn.style.display = '';
+    } else {
+      if (expectBtn) expectBtn.style.display = 'none';
+      if (expectPanel) expectPanel.innerHTML = '';
     }
 
-    // 猜你喜欢（其他会员，最多 5 位）
+    // Tab 切换（资料 / 择偶要求）
+    const tabs = document.querySelectorAll('#pdpTabs .pdp-tab');
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () {
+        tabs.forEach(x => x.classList.remove('active'));
+        t.classList.add('active');
+        const which = t.getAttribute('data-tab');
+        const b = document.getElementById('tabBasic');
+        const e = document.getElementById('tabExpect');
+        if (b) b.classList.toggle('active', which === 'basic');
+        if (e) e.classList.toggle('active', which === 'expect');
+      });
+    });
+
+    // 猜你喜欢（其他会员，最多 5 位，始终显示）
     const sug = document.getElementById('psugList');
     if (sug) {
       sug.innerHTML = '';
