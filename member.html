@@ -30,25 +30,19 @@
       <div class="page active profile-detail-page">
         <!-- 头部大图 -->
         <div class="pdp-header">
-          <img src="https://i.pravatar.cc/600?img=47" onerror="avatarFallback(this,'林')">
+          <img id="pdpAvatar" src="" alt="头像">
           <button class="pdp-back-btn" onclick="location.href='match.html'"><i class="fas fa-chevron-left"></i></button>
         </div>
 
         <!-- 昵称行 -->
         <div class="pdp-name-row">
-          <h1>林晓薇 <span class="pdp-gender-icon"><i class="fas fa-venus"></i></span></h1>
-          <span class="pdp-uid">交友ID:100247</span>
-          <span class="pdp-location"><i class="fas fa-map-marker-alt"></i> 上海 · 静安区</span>
+          <h1 id="pdpName"></h1>
+          <span class="pdp-uid" id="pdpUid"></span>
+          <span class="pdp-location" id="pdpLocation"></span>
         </div>
 
         <!-- 标签 -->
-        <div class="pdp-tags">
-          <span class="pdp-tag pdp-tag-age">28岁</span>
-          <span class="pdp-tag pdp-tag-height">168cm</span>
-          <span class="pdp-tag pdp-tag-zodiac">天蝎座</span>
-          <span class="pdp-tag pdp-tag-job">外企市场</span>
-          <span class="pdp-tag pdp-tag-income">20-30万</span>
-        </div>
+        <div class="pdp-tags" id="pdpTags"></div>
 
         <!-- 选项卡 -->
         <div class="pdp-tabs">
@@ -59,51 +53,18 @@
         <div class="pdp-tab-panel active" id="profileTabBasic">
           <div class="pdp-section">
             <div class="pds-title">基本资料</div>
-            <div class="pds-grid">
-              <div class="pds-field"><span class="label">性别</span><span class="value">女</span></div>
-              <div class="pds-field"><span class="label">年龄</span><span class="value">28岁</span></div>
-              <div class="pds-field"><span class="label">身高</span><span class="value">168cm</span></div>
-              <div class="pds-field"><span class="label">婚姻状况</span><span class="value">未婚</span></div>
-              <div class="pds-field"><span class="label">学历</span><span class="value">本科</span></div>
-              <div class="pds-field"><span class="label">所在地</span><span class="value">上海</span></div>
-              <div class="pds-field"><span class="label">房产信息</span><span class="value">有(无贷款)</span></div>
-              <div class="pds-field"><span class="label">车辆信息</span><span class="value">无</span></div>
-              <div class="pds-field pds-full"><span class="label">兴趣爱好</span><span class="value">旅行、烘焙、看展、瑜伽、宠物</span></div>
-            </div>
+            <div class="pds-grid" id="pdsGrid"></div>
           </div>
 
           <div class="pdp-section" style="margin-top:14px;">
             <div class="pds-title">自我介绍</div>
-            <div style="background:var(--primary-light);padding:12px;border-radius:10px;font-size:13px;line-height:1.6;color:var(--text);">
-              海归市场人，喜欢有规划、情绪稳定的人。工作之余爱旅行和烘焙，希望找一个能一起逛展、一起下厨的伴侣。真诚交友，非诚勿扰～
-            </div>
+            <div id="pdpIntro" style="background:var(--primary-light);padding:12px;border-radius:10px;font-size:13px;line-height:1.6;color:var(--text);"></div>
           </div>
 
           <!-- 猜你喜欢 -->
           <div class="pdp-suggest">
             <div class="psug-header"><div class="psug-title">猜你喜欢</div></div>
-            <div class="psug-list">
-              <a class="psug-item" href="member.html">
-                <div class="psug-avatar"><img src="https://i.pravatar.cc/120?img=15" onerror="avatarFallback(this,'王')"></div>
-                <div class="psug-name">王梓涵</div>
-              </a>
-              <a class="psug-item" href="member.html">
-                <div class="psug-avatar"><img src="https://i.pravatar.cc/120?img=12" onerror="avatarFallback(this,'顾')"></div>
-                <div class="psug-name">顾辰</div>
-              </a>
-              <a class="psug-item" href="member.html">
-                <div class="psug-avatar"><img src="https://i.pravatar.cc/120?img=13" onerror="avatarFallback(this,'张')"></div>
-                <div class="psug-name">张沐阳</div>
-              </a>
-              <a class="psug-item" href="member.html">
-                <div class="psug-avatar"><img src="https://i.pravatar.cc/120?img=14" onerror="avatarFallback(this,'刘')"></div>
-                <div class="psug-name">刘宇航</div>
-              </a>
-              <a class="psug-item" href="member.html">
-                <div class="psug-avatar"><img src="https://i.pravatar.cc/120?img=20" onerror="avatarFallback(this,'李')"></div>
-                <div class="psug-name">李梦琪</div>
-              </a>
-            </div>
+            <div class="psug-list" id="psugList"></div>
           </div>
         </div>
       </div>

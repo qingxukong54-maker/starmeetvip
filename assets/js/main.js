@@ -85,9 +85,75 @@
     img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svg);
   };
 
-  /* ---------- 跳转会员详情 ---------- */
-  window.goMember = function () {
-    location.href = 'member.html';
+  /* ---------- 会员数据（数据驱动，?id=编号） ---------- */
+  const RAW_MEMBERS = [
+    { id:1,  name:'林晓薇', gender:'女', img:47, age:28, city:'上海', district:'静安区', height:168, zodiac:'天蝎座', job:'外企市场', income:'20-30万', marriage:'未婚', education:'本科', housing:'有(无贷款)', car:'无', interests:'旅行、烘焙、看展、瑜伽、宠物', intro:'海归市场人，喜欢有规划、情绪稳定的人。工作之余爱旅行和烘焙，希望找一个能一起逛展、一起下厨的伴侣。真诚交友，非诚勿扰～' },
+    { id:2,  name:'苏曼妮', gender:'女', img:45, age:29, city:'上海', district:'浦东新区', height:170, zodiac:'双子座', job:'留学顾问', income:'30万以上', marriage:'未婚', education:'硕士', housing:'有(无贷款)', car:'有', interests:'旅行、红酒、话剧、宠物', intro:'海归留学顾问，阅人无数但依然相信爱情。喜欢有品位的约会，也享受独处的安静。' },
+    { id:3,  name:'陈嘉怡', gender:'女', img:44, age:26, city:'杭州', district:'西湖区', height:165, zodiac:'处女座', job:'UI设计师', income:'10-20万', marriage:'未婚', education:'大专', housing:'租房', car:'无', interests:'插画、看展、咖啡、露营', intro:'文艺系UI设计师，周末爱逛展和露营。期待一个能一起发现生活小美好的你。' },
+    { id:4,  name:'李梦琪', gender:'女', img:20, age:29, city:'成都', district:'锦江区', height:163, zodiac:'巨蟹座', job:'护士', income:'10-20万', marriage:'未婚', education:'本科', housing:'租房', car:'无', interests:'美食、追剧、瑜伽', intro:'成都小护士，温柔顾家。希望找一个踏实靠谱、会疼人的另一半。' },
+    { id:5,  name:'周雅婷', gender:'女', img:41, age:31, city:'广州', district:'天河区', height:166, zodiac:'摩羯座', job:'高中教师', income:'20-30万', marriage:'未婚', education:'本科', housing:'有(无贷款)', car:'无', interests:'读书、园艺、旅行', intro:'人民教师，理性温和。喜欢有共同话题、能一起成长的人。' },
+    { id:6,  name:'白思琪', gender:'女', img:32, age:26, city:'杭州', district:'滨江区', height:167, zodiac:'水瓶座', job:'自由插画师', income:'10-20万', marriage:'未婚', education:'本科', housing:'租房', car:'无', interests:'绘画、动漫、猫、旅行', intro:'自由插画师，养猫一只。喜欢安静也喜欢远方，想找个能读懂我画的人。' },
+    { id:7,  name:'赵欣怡', gender:'女', img:49, age:25, city:'深圳', district:'南山区', height:160, zodiac:'狮子座', job:'新媒体运营', income:'10-20万', marriage:'未婚', education:'本科', housing:'租房', car:'无', interests:'短视频、穿搭、美食', intro:'深圳新媒体女孩，热爱生活热爱分享。期待一个有趣灵魂来双向奔赴。' },
+    { id:8,  name:'孙雨桐', gender:'女', img:33, age:27, city:'南京', district:'鼓楼区', height:164, zodiac:'双鱼座', job:'银行职员', income:'20-30万', marriage:'未婚', education:'硕士', housing:'有(无贷款)', car:'无', interests:'旅行、健身、电影', intro:'银行白领，自律爱运动。希望对方也热爱生活、积极向上。' },
+    { id:9,  name:'王梓涵', gender:'男', img:15, age:32, city:'北京', district:'朝阳区', height:172, zodiac:'射手座', job:'企业主管', income:'30万以上', marriage:'未婚', education:'硕士', housing:'有(有贷款)', car:'有', interests:'高尔夫、旅行、投资', intro:'互联网企业中层，理性务实。希望找一个独立、聊得来的伴侣。' },
+    { id:10, name:'顾辰',   gender:'男', img:12, age:30, city:'北京', district:'海淀区', height:178, zodiac:'天秤座', job:'软件工程师', income:'30万以上', marriage:'未婚', education:'本科', housing:'有(无贷款)', car:'有', interests:'编程、登山、摄影', intro:'程序员但不宅，周末爱登山拍照。想找个能一起看世界的人。' },
+    { id:11, name:'张沐阳', gender:'男', img:13, age:33, city:'深圳', district:'福田区', height:180, zodiac:'金牛座', job:'投资人', income:'30万以上', marriage:'未婚', education:'硕士', housing:'有(无贷款)', car:'有', interests:'金融、滑雪、红酒', intro:'投资人，看人很准。希望遇到一个真诚、有自己热爱的人。' },
+    { id:12, name:'刘宇航', gender:'男', img:14, age:31, city:'上海', district:'徐汇区', height:175, zodiac:'双子座', job:'医生', income:'30万以上', marriage:'未婚', education:'博士', housing:'有(无贷款)', car:'有', interests:'医学研究、跑步、阅读', intro:'外科医生，忙但靠谱。期待一个理解我的节奏、温柔以待的人。' },
+    { id:13, name:'陈一鸣', gender:'男', img:3,  age:30, city:'北京', district:'东城区', height:176, zodiac:'狮子座', job:'律师', income:'30万以上' },
+    { id:14, name:'赵思琪', gender:'女', img:4,  age:27, city:'上海', district:'黄浦区', height:165, zodiac:'天秤座', job:'设计师', income:'20-30万' },
+    { id:15, name:'孙浩',   gender:'男', img:5,  age:29, city:'广州', district:'越秀区', height:178, zodiac:'白羊座', job:'创业者', income:'30万以上' },
+    { id:16, name:'周雨彤', gender:'女', img:6,  age:28, city:'深圳', district:'宝安区', height:168, zodiac:'双鱼座', job:'主持人', income:'20-30万' },
+    { id:17, name:'吴磊',   gender:'男', img:7,  age:31, city:'杭州', district:'上城区', height:180, zodiac:'处女座', job:'建筑师', income:'30万以上' },
+    { id:18, name:'黄子轩', gender:'男', img:8,  age:28, city:'成都', district:'武侯区', height:177, zodiac:'天蝎座', job:'产品经理', income:'20-30万' },
+    { id:19, name:'徐若晗', gender:'女', img:9,  age:26, city:'南京', district:'建邺区', height:162, zodiac:'巨蟹座', job:'翻译', income:'10-20万' },
+    { id:20, name:'马俊',   gender:'男', img:10, age:32, city:'武汉', district:'洪山区', height:179, zodiac:'摩羯座', job:'销售总监', income:'30万以上' },
+    { id:21, name:'朱琳',   gender:'女', img:11, age:29, city:'苏州', district:'工业园区', height:166, zodiac:'双子座', job:'人力资源', income:'20-30万' },
+    { id:22, name:'何雨泽', gender:'男', img:16, age:30, city:'重庆', district:'渝中区', height:175, zodiac:'射手座', job:'摄影师', income:'20-30万' },
+    { id:23, name:'高欣怡', gender:'女', img:17, age:27, city:'西安', district:'雁塔区', height:163, zodiac:'水瓶座', job:'医生', income:'20-30万' },
+    { id:24, name:'罗晨',   gender:'男', img:18, age:33, city:'天津', district:'和平区', height:178, zodiac:'金牛座', job:'工程师', income:'30万以上' },
+    { id:25, name:'郑爽',   gender:'女', img:19, age:25, city:'长沙', district:'岳麓区', height:160, zodiac:'狮子座', job:'模特', income:'10-20万' },
+    { id:26, name:'梁博',   gender:'男', img:21, age:31, city:'青岛', district:'市南区', height:181, zodiac:'天秤座', job:'金融分析师', income:'30万以上' },
+    { id:27, name:'谢霆',   gender:'男', img:22, age:29, city:'厦门', district:'思明区', height:177, zodiac:'双子座', job:'金融分析师', income:'30万以上' },
+    { id:28, name:'唐艺',   gender:'女', img:23, age:28, city:'合肥', district:'蜀山区', height:164, zodiac:'天蝎座', job:'钢琴老师', income:'20-30万' },
+    { id:29, name:'韩雪',   gender:'女', img:24, age:26, city:'郑州', district:'金水区', height:161, zodiac:'处女座', job:'编辑', income:'10-20万' },
+    { id:30, name:'冯宇',   gender:'男', img:25, age:32, city:'大连', district:'中山区', height:179, zodiac:'摩羯座', job:'海员', income:'20-30万' },
+    { id:31, name:'董洁',   gender:'女', img:26, age:30, city:'昆明', district:'五华区', height:165, zodiac:'双鱼座', job:'花艺师', income:'20-30万' }
+  ];
+
+  function buildMember(r) {
+    const interests = r.interests || '旅行、美食、电影、运动';
+    return {
+      id: String(r.id),
+      name: r.name,
+      gender: r.gender,
+      img: r.img,
+      age: r.age,
+      city: r.city,
+      district: r.district || '',
+      height: r.height,
+      zodiac: r.zodiac,
+      job: r.job,
+      income: r.income,
+      marriage: r.marriage || '未婚',
+      education: r.education || '本科',
+      housing: r.housing || '有(无贷款)',
+      car: r.car || '无',
+      interests: interests,
+      intro: r.intro || ('我是' + r.name + '，来自' + r.city + '，从事' + r.job + '。平时喜欢' + interests + '。希望在这里遇到合拍的你，真诚交友，非诚勿扰～'),
+      uid: r.uid || ('100' + String(247 + r.id * 13))
+    };
+  }
+
+  const MEMBERS = {};
+  RAW_MEMBERS.forEach(function (r) { const m = buildMember(r); MEMBERS[m.id] = m; });
+  const MEMBER_LIST = Object.keys(MEMBERS).map(function (k) { return MEMBERS[k]; });
+  const MEMBER_BY_NAME = {};
+  MEMBER_LIST.forEach(function (m) { MEMBER_BY_NAME[m.name] = m.id; });
+
+  /* ---------- 跳转会员详情（兼容传姓名或编号） ---------- */
+  window.goMember = function (key) {
+    const id = MEMBER_BY_NAME[key] || key;
+    location.href = 'member.html?id=' + id;
   };
 
   /* ---------- 喜欢按钮（主页嘉宾卡片） ---------- */
@@ -412,7 +478,7 @@
       a.participants.forEach(p => {
         const item = document.createElement('a');
         item.className = 'psug-item';
-        item.href = 'member.html';
+        item.href = 'member.html?id=' + (MEMBER_BY_NAME[p[1]] || '');
         item.innerHTML = '<div class="psug-avatar"><img src="https://i.pravatar.cc/120?img=' +
           (p[1].charCodeAt(0) % 70) + '" onerror="avatarFallback(this,\'' + p[0] + '\')"></div>' +
           '<div class="psug-name">' + p[1] + '</div>';
@@ -435,6 +501,99 @@
     }
   }
 
+  /* ---------- 会员详情（数据驱动，?id=编号） ---------- */
+  function initMemberDetail() {
+    const box = document.getElementById('pdpAvatar');
+    if (!box) return; // 非会员详情页
+    const params = new URLSearchParams(location.search);
+    const id = params.get('id') || '1';
+    const m = MEMBERS[id] || MEMBERS['1'];
+    if (!m) return;
+
+    document.title = m.name + ' - StarMeet';
+
+    // 头像
+    box.src = 'https://i.pravatar.cc/600?img=' + m.img;
+    box.onerror = function () { avatarFallback(box, m.name); };
+
+    // 昵称 + 性别图标
+    const nm = document.getElementById('pdpName');
+    if (nm) {
+      const icon = m.gender === '女' ? 'fa-venus' : 'fa-mars';
+      nm.innerHTML = m.name + ' <span class="pdp-gender-icon"><i class="fas ' + icon + '"></i></span>';
+    }
+    const set = (elId, val) => { const e = document.getElementById(elId); if (e) e.textContent = val; };
+    set('pdpUid', '交友ID:' + m.uid);
+
+    const loc = document.getElementById('pdpLocation');
+    if (loc) loc.innerHTML = '<i class="fas fa-map-marker-alt"></i> ' + m.city + (m.district ? ' · ' + m.district : '');
+
+    // 标签
+    const tags = document.getElementById('pdpTags');
+    if (tags) {
+      tags.innerHTML = '';
+      [m.age + '岁', m.height + 'cm', m.zodiac, m.job, m.income].forEach(function (t) {
+        const s = document.createElement('span');
+        s.className = 'pdp-tag';
+        s.textContent = t;
+        tags.appendChild(s);
+      });
+    }
+
+    // 基本资料网格
+    const grid = document.getElementById('pdsGrid');
+    if (grid) {
+      grid.innerHTML = '';
+      const fields = [
+        ['性别', m.gender],
+        ['年龄', m.age + '岁'],
+        ['身高', m.height + 'cm'],
+        ['婚姻状况', m.marriage],
+        ['学历', m.education],
+        ['所在地', m.city],
+        ['房产信息', m.housing],
+        ['车辆信息', m.car]
+      ];
+      fields.forEach(function (f) {
+        const d = document.createElement('div');
+        d.className = 'pds-field';
+        d.innerHTML = '<span class="label">' + f[0] + '</span><span class="value">' + f[1] + '</span>';
+        grid.appendChild(d);
+      });
+      const full = document.createElement('div');
+      full.className = 'pds-field pds-full';
+      full.innerHTML = '<span class="label">兴趣爱好</span><span class="value">' + m.interests + '</span>';
+      grid.appendChild(full);
+    }
+
+    // 自我介绍
+    const intro = document.getElementById('pdpIntro');
+    if (intro) intro.textContent = m.intro;
+
+    // 猜你喜欢（其他会员，最多 5 位）
+    const sug = document.getElementById('psugList');
+    if (sug) {
+      sug.innerHTML = '';
+      MEMBER_LIST.filter(function (x) { return x.id !== m.id; }).slice(0, 5).forEach(function (o) {
+        const a = document.createElement('a');
+        a.className = 'psug-item';
+        a.href = 'member.html?id=' + o.id;
+        const av = document.createElement('div');
+        av.className = 'psug-avatar';
+        const im = document.createElement('img');
+        im.src = 'https://i.pravatar.cc/120?img=' + o.img;
+        im.onerror = function () { avatarFallback(im, o.name); };
+        av.appendChild(im);
+        const nm2 = document.createElement('div');
+        nm2.className = 'psug-name';
+        nm2.textContent = o.name;
+        a.appendChild(av);
+        a.appendChild(nm2);
+        sug.appendChild(a);
+      });
+    }
+  }
+
   /* ---------- 启动 ---------- */
   document.addEventListener('DOMContentLoaded', function () {
     initBanner();
@@ -443,5 +602,6 @@
     initDragScroll();
     initServiceModal();
     initActivityDetail();
+    initMemberDetail();
   });
 })();
