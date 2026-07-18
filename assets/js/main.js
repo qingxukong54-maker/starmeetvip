@@ -47,16 +47,6 @@
       }
     },
 
-  /* ---------- 全局分享 ---------- */
-  sharePage() {
-    const url = location.href;
-    const title = document.title || 'StarMeet';
-    if (navigator.share) {
-      navigator.share({ title: title, url: url }).catch(() => fallbackCopy(url));
-    } else {
-      fallbackCopy(url, () => App.toast('页面链接已复制'));
-    }
-  }
   };
 
   /* 复制兜底（非 https / 旧浏览器） */
@@ -256,17 +246,14 @@
     if (!bar || !grid) return;
 
     let curGender = '';
-    let vipOnly = false;
 
     function apply() {
       let tag = [];
       grid.querySelectorAll('.grid-card').forEach(card => {
         const okG = !curGender || card.dataset.gender === curGender;
-        const okV = !vipOnly || card.dataset.vip;
-        card.style.display = (okG && okV) ? '' : 'none';
+        card.style.display = okG ? '' : 'none';
       });
       if (curGender) tag.push(curGender === '女' ? '找女生' : '找男生');
-      if (vipOnly) tag.push('VIP');
       if (tag.length) {
         activeFilters.style.display = 'block';
         activeFilters.innerHTML = '已筛选：' + tag.join(' · ') + ' <a style="color:var(--primary);margin-left:6px;" onclick="clearMatchFilter()">清除</a>';
@@ -275,7 +262,7 @@
       }
     }
     window.clearMatchFilter = function () {
-      curGender = ''; vipOnly = false;
+      curGender = '';
       bar.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
       bar.querySelector('.chip[data-gender=""]').classList.add('active');
       apply();
@@ -283,15 +270,13 @@
 
     bar.querySelectorAll('.chip').forEach(c => {
       c.addEventListener('click', () => {
-        if (c.dataset.vip !== undefined) {
-          vipOnly = !vipOnly;
-          c.classList.toggle('active', vipOnly);
-        } else if (c.dataset.gender !== undefined) {
-          bar.querySelectorAll('.chip').forEach(x => { if (x.dataset.vip === undefined) x.classList.remove('active'); });
-          if (curGender === c.dataset.gender) { curGender = ''; c.classList.remove('active'); }
-          else { curGender = c.dataset.gender; c.classList.add('active'); }
+        if (c.dataset.gender === undefined) return; // 筛选按钮（已有 onclick toast）
+        bar.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
+        if (curGender === c.dataset.gender) {
+          curGender = '';
         } else {
-          return; // 筛选按钮（已有 onclick toast）
+          curGender = c.dataset.gender;
+          c.classList.add('active');
         }
         apply();
       });

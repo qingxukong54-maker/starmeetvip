@@ -256,12 +256,6 @@ button { font-family: inherit; cursor: pointer; }
   flex-shrink: 0;
 }
 .member-card-photo img { width: 100%; height: 100%; min-height: 132px; object-fit: cover; }
-.vip-tag {
-  position: absolute; top: 8px; left: 8px;
-  background: var(--gold); color: #5a3b00;
-  font-size: 10px; font-weight: 700;
-  padding: 2px 7px; border-radius: 10px;
-}
 .member-card-info { flex: 1; padding: 12px 12px 10px; display: flex; flex-direction: column; }
 .member-card-info .row1 .meta-name { font-size: 16px; font-weight: 700; }
 .row-birthjob { display: flex; align-items: baseline; gap: 8px; margin: 4px 0; }
@@ -369,7 +363,6 @@ button { font-family: inherit; cursor: pointer; }
 .grid-card > img {
   width: 100%; height: 200px; object-fit: cover;
 }
-.grid-card .vip-tag { position: absolute; top: 8px; left: 8px; }
 .grid-card .info { padding: 8px 10px 10px; }
 .grid-card .name { font-size: 14px; font-weight: 600; color: var(--text); }
 .grid-card .meta { font-size: 11px; color: var(--text-3); margin-top: 2px;

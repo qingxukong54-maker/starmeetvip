@@ -34,7 +34,6 @@
           <div class="chip active" data-gender="">全部</div>
           <div class="chip" data-gender="女">找女生</div>
           <div class="chip" data-gender="男">找男生</div>
-          <div class="chip" data-vip="true">VIP</div>
           <div class="chip" onclick="App.toast('高级筛选开发中')"><span>🔍 筛选</span></div>
         </div>
 
@@ -42,79 +41,75 @@
 
         <div class="user-grid" id="userGrid">
           <!-- 女生 -->
-          <div class="grid-card" data-gender="女" data-vip="" onclick="goMember('林晓薇')">
+          <div class="grid-card" data-gender="女" onclick="goMember('林晓薇')">
             <img src="https://i.pravatar.cc/300?img=47" onerror="avatarFallback(this,'林')">
             <div class="info">
               <div class="name">林晓薇</div>
               <div class="meta">28岁 · 上海 · 外企市场</div>            </div>
           </div>
-          <div class="grid-card" data-gender="女" data-vip="1" onclick="goMember('苏曼妮')">
+          <div class="grid-card" data-gender="女" onclick="goMember('苏曼妮')">
             <img src="https://i.pravatar.cc/300?img=45" onerror="avatarFallback(this,'苏')">
-            <div class="vip-tag">★ VIP2</div>
             <div class="info">
               <div class="name">苏曼妮</div>
               <div class="meta">29岁 · 上海 · 留学顾问</div>            </div>
           </div>
-          <div class="grid-card" data-gender="女" data-vip="" onclick="goMember('陈嘉怡')">
+          <div class="grid-card" data-gender="女" onclick="goMember('陈嘉怡')">
             <img src="https://i.pravatar.cc/300?img=44" onerror="avatarFallback(this,'陈')">
             <div class="info">
               <div class="name">陈嘉怡</div>
               <div class="meta">26岁 · 杭州 · UI设计师</div>            </div>
           </div>
-          <div class="grid-card" data-gender="女" data-vip="" onclick="goMember('李梦琪')">
+          <div class="grid-card" data-gender="女" onclick="goMember('李梦琪')">
             <img src="https://i.pravatar.cc/300?img=20" onerror="avatarFallback(this,'李')">
             <div class="info">
               <div class="name">李梦琪</div>
               <div class="meta">29岁 · 成都 · 护士</div>            </div>
           </div>
-          <div class="grid-card" data-gender="女" data-vip="1" onclick="goMember('周雅婷')">
+          <div class="grid-card" data-gender="女" onclick="goMember('周雅婷')">
             <img src="https://i.pravatar.cc/300?img=41" onerror="avatarFallback(this,'周')">
-            <div class="vip-tag">★ VIP1</div>
             <div class="info">
               <div class="name">周雅婷</div>
               <div class="meta">31岁 · 广州 · 高中教师</div>            </div>
           </div>
-          <div class="grid-card" data-gender="女" data-vip="" onclick="goMember('白思琪')">
+          <div class="grid-card" data-gender="女" onclick="goMember('白思琪')">
             <img src="https://i.pravatar.cc/300?img=32" onerror="avatarFallback(this,'白')">
             <div class="info">
               <div class="name">白思琪</div>
               <div class="meta">26岁 · 杭州 · 自由插画师</div>            </div>
           </div>
-          <div class="grid-card" data-gender="女" data-vip="" onclick="goMember('赵欣怡')">
+          <div class="grid-card" data-gender="女" onclick="goMember('赵欣怡')">
             <img src="https://i.pravatar.cc/300?img=49" onerror="avatarFallback(this,'赵')">
             <div class="info">
               <div class="name">赵欣怡</div>
               <div class="meta">25岁 · 深圳 · 新媒体运营</div>            </div>
           </div>
-          <div class="grid-card" data-gender="女" data-vip="" onclick="goMember('孙雨桐')">
+          <div class="grid-card" data-gender="女" onclick="goMember('孙雨桐')">
             <img src="https://i.pravatar.cc/300?img=33" onerror="avatarFallback(this,'孙')">
             <div class="info">
               <div class="name">孙雨桐</div>
               <div class="meta">27岁 · 南京 · 银行职员</div>            </div>
           </div>
           <!-- 男生 -->
-          <div class="grid-card" data-gender="男" data-vip="1" onclick="goMember('王梓涵')">
+          <div class="grid-card" data-gender="男" onclick="goMember('王梓涵')">
             <img src="https://i.pravatar.cc/300?img=15" onerror="avatarFallback(this,'王')">
-            <div class="vip-tag">★ VIP3</div>
             <div class="info">
               <div class="name">王梓涵</div>
               <div class="meta">32岁 · 北京 · 企业主管</div>            </div>
           </div>
-          <div class="grid-card" data-gender="男" data-vip="" onclick="goMember('顾辰')">
+          <div class="grid-card" data-gender="男" onclick="goMember('顾辰')">
             <img src="https://i.pravatar.cc/300?img=12" onerror="avatarFallback(this,'顾')">
             <div class="info">
               <div class="name">顾辰</div>
               <div class="meta">30岁 · 北京 · 软件工程师</div>            </div>
           </div>
-          <div class="grid-card" data-gender="男" data-vip="" onclick="goMember('张沐阳')">
+          <div class="grid-card" data-gender="男" onclick="goMember('张沐阳')">
             <img src="https://i.pravatar.cc/300?img=13" onerror="avatarFallback(this,'张')">
             <div class="info">
               <div class="name">张沐阳</div>
               <div class="meta">33岁 · 深圳 · 投资人</div>            </div>
           </div>
-          <div class="grid-card" data-gender="男" data-vip="1" onclick="goMember('刘宇航')">
+          <div class="grid-card" data-gender="男" onclick="goMember('刘宇航')">
             <img src="https://i.pravatar.cc/300?img=14" onerror="avatarFallback(this,'刘')">
-            <div class="vip-tag">★ VIP2</div>
             <div class="info">
               <div class="name">刘宇航</div>
               <div class="meta">31岁 · 上海 · 医生</div>            </div>
@@ -133,7 +128,6 @@
     </nav>
 
     <div class="fab-container">
-      <a class="fab-btn" onclick="App.sharePage()"><i class="fas fa-share-alt"></i></a>
       <a class="fab-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-chevron-up"></i></a>
       <a class="fab-btn" onclick="App.openService()"><i class="fas fa-headset"></i></a>
     </div>

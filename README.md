@@ -4,12 +4,12 @@
 
 ## 页面结构
 - `index.html` — 首页（轮播 banner / 快捷入口 / 今日之星 / 最新嘉宾 / 交友活动）
-- `match.html` — 找缘分（用户网格 + 性别/VIP 筛选）
+- `match.html` — 找缘分（用户网格 + 性别筛选）
 - `activity.html` — 活动（报名中 / 已结束 筛选）
 - `activity-detail.html` — 活动详情（数据驱动，见 `assets/js/main.js` 的 `ACTIVITIES`）
 - `member.html` — 会员详情（资料 + 猜你喜欢 + 加入 CTA）
 - `assets/css/style.css` — 共享设计系统（主色 `#ff5a6e`，渐变 `#ff5a6e→#ff8a3d`）
-- `assets/js/main.js` — 交互脚本（客服弹窗、复制微信号、分享、轮播、筛选、活动详情）
+- `assets/js/main.js` — 交互脚本（客服弹窗、复制微信号、轮播、筛选、活动详情）
 
 ## 设计要点
 - 移动端优先，居中手机列（max-width 480px）
