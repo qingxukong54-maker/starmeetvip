@@ -727,19 +727,23 @@
       });
     });
 
-    // 猜你喜欢（其他会员，最多 5 位，始终显示）
+    // 猜你喜欢（固定展示 1/7/8/9/13 号会员，排除当前会员）
     const sug = document.getElementById('psugList');
     if (sug) {
       sug.innerHTML = '';
-      MEMBER_LIST.filter(function (x) { return x.id !== m.id; }).slice(0, 5).forEach(function (o) {
+      const GUESS_IDS = [1, 7, 8, 9, 13];
+      GUESS_IDS.filter(function (gid) { return gid !== m.id; })
+        .map(function (gid) { return MEMBER_LIST.find(function (x) { return x.id === gid; }); })
+        .filter(Boolean)
+        .forEach(function (o) {
         const a = document.createElement('a');
         a.className = 'psug-item';
         a.href = 'member.html?id=' + o.id;
         const av = document.createElement('div');
         av.className = 'psug-avatar';
         const im = document.createElement('img');
-        im.onerror = null;
-        im.src = avatarURI(o.name);
+        im.onerror = function () { this.onerror = null; this.src = avatarURI(o.name); };
+        im.src = o.photo ? o.photo : avatarURI(o.name);
         av.appendChild(im);
         const nm2 = document.createElement('div');
         nm2.className = 'psug-name';
