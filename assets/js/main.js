@@ -153,20 +153,20 @@
 
   /* ---------- 会员数据（数据驱动，?id=编号） ---------- */
   const RAW_MEMBERS = [
-    { id:1,  name:'Kelly', gender:'女', img:47, age:38, city:'福州', district:'', height:163, zodiac:'双鱼座', job:'无业游民', income:'0.3万', marriage:'未婚', education:'高中', housing:'无', car:'无', interests:'聊天', intro:'走别人的路，让别人无路可走', birth:'1986-12-10', blood_type:'AB型', weight:70, wechat:'15980276203', uid:'00001', photo:'assets/images/member-00001.jpg', expect_gender:'男', expect_age:'18-65岁', expect_height:'140-180cm', expect_education:'不限', expect_marriage:'不限', expect_income:'40万', expect_marry_time:'随时', purpose:'真诚交友', expect_other:'看眼缘' },
-    { id:2,  name:'苏曼妮', gender:'女', img:45, age:29, city:'上海', district:'浦东新区', height:170, zodiac:'双子座', job:'留学顾问', income:'30万以上', marriage:'未婚', education:'硕士', housing:'有(无贷款)', car:'有', interests:'旅行、红酒、话剧、宠物', intro:'海归留学顾问，阅人无数但依然相信爱情。喜欢有品位的约会，也享受独处的安静。', uid:'00002' },
-    { id:3,  name:'陈嘉怡', gender:'女', img:44, age:26, city:'杭州', district:'西湖区', height:165, zodiac:'处女座', job:'UI设计师', income:'10-20万', marriage:'未婚', education:'大专', housing:'租房', car:'无', interests:'插画、看展、咖啡、露营', intro:'文艺系UI设计师，周末爱逛展和露营。期待一个能一起发现生活小美好的你。', uid:'00003' },
-    { id:4,  name:'李梦琪', gender:'女', img:20, age:29, city:'成都', district:'锦江区', height:163, zodiac:'巨蟹座', job:'护士', income:'10-20万', marriage:'未婚', education:'本科', housing:'租房', car:'无', interests:'美食、追剧、瑜伽', intro:'成都小护士，温柔顾家。希望找一个踏实靠谱、会疼人的另一半。', uid:'00004' },
-    { id:5,  name:'周雅婷', gender:'女', img:41, age:31, city:'广州', district:'天河区', height:166, zodiac:'摩羯座', job:'高中教师', income:'20-30万', marriage:'未婚', education:'本科', housing:'有(无贷款)', car:'无', interests:'读书、园艺、旅行', intro:'人民教师，理性温和。喜欢有共同话题、能一起成长的人。', uid:'00005' },
-    { id:6,  name:'白思琪', gender:'女', img:32, age:26, city:'杭州', district:'滨江区', height:167, zodiac:'水瓶座', job:'自由插画师', income:'10-20万', marriage:'未婚', education:'本科', housing:'租房', car:'无', interests:'绘画、动漫、猫、旅行', intro:'自由插画师，养猫一只。喜欢安静也喜欢远方，想找个能读懂我画的人。', uid:'00006' },
-    { id:7,  name:'熙', gender:'女', img:49, age:35, city:'福州', district:'', height:158, zodiac:'金牛座', job:'老师', income:'20万', marriage:'未婚', education:'本科', housing:'有(有贷款)', car:'有(无贷款)', interests:'美食 旅行 婚礼', intro:'兢兢业业的教育工作者', birth:'1990-04-13', blood_type:'其他', weight:55, wechat:'Elina熙', uid:'00007', photo:'assets/images/member-00007.jpg', expect_gender:'不限', expect_age:'45-55岁', expect_height:'170-180cm', expect_education:'本科', expect_marriage:'未婚', expect_income:'20万', expect_marry_time:'1年内', purpose:'真诚交友', expect_other:'真诚 上进 孝顺' },
-    { id:10, name:'孙雨桐', gender:'女', img:33, age:27, city:'南京', district:'鼓楼区', height:164, zodiac:'双鱼座', job:'银行职员', income:'20-30万', marriage:'未婚', education:'硕士', housing:'有(无贷款)', car:'无', interests:'旅行、健身、电影', intro:'银行白领，自律爱运动。希望对方也热爱生活、积极向上。', uid:'00010' },
-    { id:11, name:'王梓涵', gender:'男', img:15, age:32, city:'北京', district:'', height:178, zodiac:'天秤座', job:'企业主管', income:'30万以上', marriage:'未婚', education:'本科', housing:'有(无贷款)', car:'有', interests:'健身、阅读、旅游', intro:'企业管理者，稳重有担当。希望遇到一个温柔懂事、三观契合的伴侣。', uid:'00011' },
-    { id:9,  name:'Cindy', gender:'女', img:15, age:48, city:'福州', district:'', height:167, zodiac:'水瓶座', job:'白领', income:'20-30万', marriage:'未婚', education:'本科', housing:'无', car:'无', interests:'旅行、音乐、看书、健身', intro:'喜静不喜争，心安即富足，精神世界的饱满胜于一切。', birth:'1978-01-24', blood_type:'AB型', weight:55, wechat:'Sindy233797', uid:'00009', photo:'assets/images/member-00009.jpg', expect_gender:'男', expect_age:'35-45岁', expect_height:'170-180cm', expect_education:'本科', expect_marriage:'离异', expect_income:'50万', expect_marry_time:'暂不考虑', purpose:'真诚交友', expect_other:'同频' },
-    { id:12, name:'顾辰',   gender:'男', img:12, age:30, city:'北京', district:'海淀区', height:178, zodiac:'天秤座', job:'软件工程师', income:'30万以上', marriage:'未婚', education:'本科', housing:'有(无贷款)', car:'有', interests:'编程、登山、摄影', intro:'程序员但不宅，周末爱登山拍照。想找个能一起看世界的人。', uid:'00012' },
-    { id:13, name:'张沐阳', gender:'男', img:13, age:33, city:'深圳', district:'福田区', height:180, zodiac:'金牛座', job:'投资人', income:'30万以上', marriage:'未婚', education:'硕士', housing:'有(无贷款)', car:'有', interests:'金融、滑雪、红酒', intro:'投资人，看人很准。希望遇到一个真诚、有自己热爱的人。', uid:'00013' },
-    { id:14, name:'刘宇航', gender:'男', img:14, age:31, city:'上海', district:'徐汇区', height:175, zodiac:'双子座', job:'医生', income:'30万以上', marriage:'未婚', education:'博士', housing:'有(无贷款)', car:'有', interests:'医学研究、跑步、阅读', intro:'外科医生，忙但靠谱。期待一个理解我的节奏、温柔以待的人。', uid:'00014' },
-    { id:8,  name:'Yoko',   gender:'女', photo:'assets/images/member-00008.jpg', uid:'00008', birth:'1979-10-01', age:46, blood_type:'O型', weight:60, city:'福州', district:'', height:168, zodiac:'天秤座', job:'销售', income:'10万', marriage:'离异', education:'本科', housing:'无', car:'无', wechat:'15959005052', interests:'美食', intro:'一个人', expect_gender:'男', expect_age:'55-65岁', expect_height:'170-180cm', expect_education:'大专', expect_marriage:'不限', expect_income:'190万', expect_marry_time:'1年内', purpose:'寻找结婚对象', expect_other:'一个人' }
+    { id:1,  name:'Kelly', gender:'女', img:47, age:38, city:'福州', district:'', height:163, zodiac:'双鱼座', job:'无业游民', income:'0.3万', marriage:'未婚', education:'高中', housing:'无', car:'无', interests:'聊天', intro:'走别人的路，让别人无路可走', birth:'1986-12-10', blood_type:'AB型', weight:70, wechat:'15980276203', uid:'00001', updated:'2026-07-19', photo:'assets/images/member-00001.jpg', expect_gender:'男', expect_age:'18-65岁', expect_height:'140-180cm', expect_education:'不限', expect_marriage:'不限', expect_income:'40万', expect_marry_time:'随时', purpose:'真诚交友', expect_other:'看眼缘' },
+    { id:2,  name:'苏曼妮', gender:'女', img:45, age:29, city:'上海', district:'浦东新区', height:170, zodiac:'双子座', job:'留学顾问', income:'30万以上', marriage:'未婚', education:'硕士', housing:'有(无贷款)', car:'有', interests:'旅行、红酒、话剧、宠物', intro:'海归留学顾问，阅人无数但依然相信爱情。喜欢有品位的约会，也享受独处的安静。', uid:'00002', updated:'2026-06-25' },
+    { id:3,  name:'陈嘉怡', gender:'女', img:44, age:26, city:'杭州', district:'西湖区', height:165, zodiac:'处女座', job:'UI设计师', income:'10-20万', marriage:'未婚', education:'大专', housing:'租房', car:'无', interests:'插画、看展、咖啡、露营', intro:'文艺系UI设计师，周末爱逛展和露营。期待一个能一起发现生活小美好的你。', uid:'00003', updated:'2026-06-22' },
+    { id:4,  name:'李梦琪', gender:'女', img:20, age:29, city:'成都', district:'锦江区', height:163, zodiac:'巨蟹座', job:'护士', income:'10-20万', marriage:'未婚', education:'本科', housing:'租房', car:'无', interests:'美食、追剧、瑜伽', intro:'成都小护士，温柔顾家。希望找一个踏实靠谱、会疼人的另一半。', uid:'00004', updated:'2026-06-20' },
+    { id:5,  name:'周雅婷', gender:'女', img:41, age:31, city:'广州', district:'天河区', height:166, zodiac:'摩羯座', job:'高中教师', income:'20-30万', marriage:'未婚', education:'本科', housing:'有(无贷款)', car:'无', interests:'读书、园艺、旅行', intro:'人民教师，理性温和。喜欢有共同话题、能一起成长的人。', uid:'00005', updated:'2026-06-18' },
+    { id:6,  name:'白思琪', gender:'女', img:32, age:26, city:'杭州', district:'滨江区', height:167, zodiac:'水瓶座', job:'自由插画师', income:'10-20万', marriage:'未婚', education:'本科', housing:'租房', car:'无', interests:'绘画、动漫、猫、旅行', intro:'自由插画师，养猫一只。喜欢安静也喜欢远方，想找个能读懂我画的人。', uid:'00006', updated:'2026-06-15' },
+    { id:7,  name:'熙', gender:'女', img:49, age:35, city:'福州', district:'', height:158, zodiac:'金牛座', job:'老师', income:'20万', marriage:'未婚', education:'本科', housing:'有(有贷款)', car:'有(无贷款)', interests:'美食 旅行 婚礼', intro:'兢兢业业的教育工作者', birth:'1990-04-13', blood_type:'其他', weight:55, wechat:'Elina熙', uid:'00007', updated:'2026-07-18', photo:'assets/images/member-00007.jpg', expect_gender:'不限', expect_age:'45-55岁', expect_height:'170-180cm', expect_education:'本科', expect_marriage:'未婚', expect_income:'20万', expect_marry_time:'1年内', purpose:'真诚交友', expect_other:'真诚 上进 孝顺' },
+    { id:10, name:'孙雨桐', gender:'女', img:33, age:27, city:'南京', district:'鼓楼区', height:164, zodiac:'双鱼座', job:'银行职员', income:'20-30万', marriage:'未婚', education:'硕士', housing:'有(无贷款)', car:'无', interests:'旅行、健身、电影', intro:'银行白领，自律爱运动。希望对方也热爱生活、积极向上。', uid:'00010', updated:'2026-06-12' },
+    { id:11, name:'王梓涵', gender:'男', img:15, age:32, city:'北京', district:'', height:178, zodiac:'天秤座', job:'企业主管', income:'30万以上', marriage:'未婚', education:'本科', housing:'有(无贷款)', car:'有', interests:'健身、阅读、旅游', intro:'企业管理者，稳重有担当。希望遇到一个温柔懂事、三观契合的伴侣。', uid:'00011', updated:'2026-06-10' },
+    { id:9,  name:'Cindy', gender:'女', img:15, age:48, city:'福州', district:'', height:167, zodiac:'水瓶座', job:'白领', income:'20-30万', marriage:'未婚', education:'本科', housing:'无', car:'无', interests:'旅行、音乐、看书、健身', intro:'喜静不喜争，心安即富足，精神世界的饱满胜于一切。', birth:'1978-01-24', blood_type:'AB型', weight:55, wechat:'Sindy233797', uid:'00009', updated:'2026-07-18', photo:'assets/images/member-00009.jpg', expect_gender:'男', expect_age:'35-45岁', expect_height:'170-180cm', expect_education:'本科', expect_marriage:'离异', expect_income:'50万', expect_marry_time:'暂不考虑', purpose:'真诚交友', expect_other:'同频' },
+    { id:12, name:'顾辰',   gender:'男', img:12, age:30, city:'北京', district:'海淀区', height:178, zodiac:'天秤座', job:'软件工程师', income:'30万以上', marriage:'未婚', education:'本科', housing:'有(无贷款)', car:'有', interests:'编程、登山、摄影', intro:'程序员但不宅，周末爱登山拍照。想找个能一起看世界的人。', uid:'00012', updated:'2026-06-08' },
+    { id:13, name:'张沐阳', gender:'男', img:13, age:33, city:'深圳', district:'福田区', height:180, zodiac:'金牛座', job:'投资人', income:'30万以上', marriage:'未婚', education:'硕士', housing:'有(无贷款)', car:'有', interests:'金融、滑雪、红酒', intro:'投资人，看人很准。希望遇到一个真诚、有自己热爱的人。', uid:'00013', updated:'2026-06-05' },
+    { id:14, name:'刘宇航', gender:'男', img:14, age:31, city:'上海', district:'徐汇区', height:175, zodiac:'双子座', job:'医生', income:'30万以上', marriage:'未婚', education:'博士', housing:'有(无贷款)', car:'有', interests:'医学研究、跑步、阅读', intro:'外科医生，忙但靠谱。期待一个理解我的节奏、温柔以待的人。', uid:'00014', updated:'2026-06-01' },
+    { id:8,  name:'Yoko',   gender:'女', photo:'assets/images/member-00008.jpg', uid:'00008', updated:'2026-07-19', birth:'1979-10-01', age:46, blood_type:'O型', weight:60, city:'福州', district:'', height:168, zodiac:'天秤座', job:'销售', income:'10万', marriage:'离异', education:'本科', housing:'无', car:'无', wechat:'15959005052', interests:'美食', intro:'一个人', expect_gender:'男', expect_age:'55-65岁', expect_height:'170-180cm', expect_education:'大专', expect_marriage:'不限', expect_income:'190万', expect_marry_time:'1年内', purpose:'寻找结婚对象', expect_other:'一个人' }
   ];
 
   function buildMember(r) {
@@ -194,6 +194,7 @@
       interests: interests,
       intro: r.intro || ('我是' + r.name + '，来自' + r.city + '，从事' + r.job + '。平时喜欢' + interests + '。希望在这里遇到合拍的你，真诚交友，非诚勿扰～'),
       uid: r.uid || (String(r.id).padStart(5, '0')),
+      updated: r.updated || '',
       birth: r.birth || '',
       expect_gender: r.expect_gender || '',
       expect_age: r.expect_age || '',
@@ -313,6 +314,42 @@
       }
     }
     startTimer();
+  }
+
+  /* ---------- 找缘分 列表（数据驱动，真实头像优先，其次更新时间倒序） ---------- */
+  function initMatchGrid() {
+    const grid = document.getElementById('userGrid');
+    if (!grid) return;
+    const arr = MEMBER_LIST.slice().sort(function (a, b) {
+      const pa = a.photo ? 1 : 0, pb = b.photo ? 1 : 0;
+      if (pa !== pb) return pb - pa; // 有真实头像的排前面，SVG 排在后面
+      const ta = a.updated || '', tb = b.updated || '';
+      if (ta !== tb) return ta < tb ? 1 : -1; // 更新时间倒序（新→旧）
+      return 0;
+    });
+    grid.innerHTML = '';
+    arr.forEach(function (m) {
+      const card = document.createElement('div');
+      card.className = 'grid-card';
+      card.setAttribute('data-gender', m.gender);
+      card.setAttribute('onclick', "goMember('" + m.name + "')");
+      const img = document.createElement('img');
+      img.onerror = function () { this.onerror = null; this.src = avatarURI(m.name); };
+      img.src = m.photo ? m.photo : avatarURI(m.name);
+      card.appendChild(img);
+      const info = document.createElement('div');
+      info.className = 'info';
+      const name = document.createElement('div');
+      name.className = 'name';
+      name.textContent = m.name;
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      meta.textContent = m.age + '岁 · ' + m.city + ' · ' + m.job;
+      info.appendChild(name);
+      info.appendChild(meta);
+      card.appendChild(info);
+      grid.appendChild(card);
+    });
   }
 
   /* ---------- 找缘分 筛选 ---------- */
@@ -758,6 +795,7 @@
   /* ---------- 启动 ---------- */
   document.addEventListener('DOMContentLoaded', function () {
     initBanner();
+    initMatchGrid();
     initImages();
     initMatchFilter();
     initActivityFilter();
