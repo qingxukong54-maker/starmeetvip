@@ -766,16 +766,27 @@
       });
     });
 
-    // 猜你喜欢（动态展示最新注册的5名会员，排除当前会员）
+    // 猜你喜欢（男女各半：每性别取最新注册的前3名，排除当前会员，交错排列）
     const sug = document.getElementById('psugList');
     if (sug) {
       sug.innerHTML = '';
-      MEMBER_LIST.slice().sort(function (a, b) {
-        var ta = a.updated || '', tb = b.updated || '';
-        return ta < tb ? 1 : -1;
-      }).filter(function (o) { return o.id !== m.id; })
-        .slice(0, 5)
-        .forEach(function (o) {
+      const others = MEMBER_LIST.filter(function (o) { return o.id !== m.id; });
+      const byGender = function (g) {
+        return others.filter(function (o) { return o.gender === g; })
+          .sort(function (a, b) {
+            var ta = a.updated || '', tb = b.updated || '';
+            return ta < tb ? 1 : -1;
+          });
+      };
+      const half = 3;
+      const females = byGender('女').slice(0, half);
+      const males = byGender('男').slice(0, half);
+      const combined = [];
+      for (let i = 0; i < half; i++) {
+        if (females[i]) combined.push(females[i]);
+        if (males[i]) combined.push(males[i]);
+      }
+      combined.forEach(function (o) {
         const a = document.createElement('a');
         a.className = 'psug-item';
         a.href = 'member.html?id=' + o.id;
