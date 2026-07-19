@@ -450,7 +450,7 @@
       time: '07.19 - 08.15', loc: '线上活动', joined: 4, price: '免费', priceNum: 0, status: '报名中',
       intro: '诚邀同频的你，共建真诚温暖的交友社区。首批创始会员享真人认证、人工审核、高质量会员匹配特权。我们坚信，只有真诚，才值得认真对待。扫码报名，遇见对的人。',
       schedule: [
-        { t: '01', x: '进入腾讯问卷，提交个人资料 <a href="https://wj.qq.com/s2/27344088/a696/" target="_blank" rel="noopener" style="color:#ff5a6e;font-weight:600;">点击提交</a>' },
+        { t: '01', x: '进入腾讯问卷，提交个人资料', link: 'https://wj.qq.com/s2/27344088/a696/', linkText: '点击提交 →' },
         { t: '02', x: '联系官方小助手，核实个人信息' },
         { t: '03', x: '加入官方群聊，接收最新交友资讯' }
       ],
@@ -540,7 +540,20 @@
       sch.innerHTML = '';
       a.schedule.forEach(s => {
         const li = document.createElement('li');
-        li.innerHTML = '<span class="t">' + s.t + '</span>' + s.x;
+        const tSpan = document.createElement('span');
+        tSpan.className = 't';
+        tSpan.textContent = s.t;
+        li.appendChild(tSpan);
+        li.appendChild(document.createTextNode(s.x));
+        if (s.link) {
+          const linkA = document.createElement('a');
+          linkA.href = s.link;
+          linkA.target = '_blank';
+          linkA.rel = 'noopener';
+          linkA.textContent = s.linkText || '点击提交';
+          linkA.style.cssText = 'color:#ff5a6e;font-weight:600;margin-left:6px;text-decoration:none;display:inline-block;';
+          li.appendChild(linkA);
+        }
         sch.appendChild(li);
       });
     }
