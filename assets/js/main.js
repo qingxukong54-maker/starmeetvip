@@ -732,8 +732,8 @@
     if (sug) {
       sug.innerHTML = '';
       const GUESS_IDS = [1, 7, 8, 9, 13];
-      GUESS_IDS.filter(function (gid) { return gid !== m.id; })
-        .map(function (gid) { return MEMBER_LIST.find(function (x) { return x.id === gid; }); })
+      GUESS_IDS.filter(function (gid) { return String(gid) !== m.id; })
+        .map(function (gid) { return MEMBER_LIST.find(function (x) { return x.id === String(gid); }); })
         .filter(Boolean)
         .forEach(function (o) {
         const a = document.createElement('a');

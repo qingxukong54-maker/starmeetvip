@@ -1,83 +1,101 @@
-"""Generate Yoko member carousel banner (750x320)"""
+#!/usr/bin/env python3
+"""Take Cindy banner screenshot as base — replace only: photo + specific text fields."""
 from PIL import Image, ImageDraw, ImageFont
+import os
 
-SRC = r'D:\Backup\xwechat_files\shadow_o_a2ca\temp\RWTemp\2026-07\3cdd4224fe3691437627f9f0cc3da11f.jpg'
-DST = r'C:\Users\Administrator\WorkBuddy\Claw\assets\images\banner-yoko.png'
-W, H = 750, 320
+BASE = r'C:\Users\Administrator\.workbuddy\clipboard-images\clipboard-2026-07-19T12-08-10-815Z-7d13dc80.png'
+PHOTO_SRC = r'C:\Users\Administrator\.workbuddy\clipboard-images\clipboard-2026-07-19T12-08-10-823Z-53bab625.png'
+OUT = r'assets\images\banner-yoko.png'
 
-RS = Image.Resampling.LANCZOS if hasattr(Image, 'Resampling') else Image.LANCZOS
+base = Image.open(BASE).convert('RGBA')
+bw, bh = base.size
+print(f'Base: {bw}x{bh}')
 
-src = Image.open(SRC).convert('RGB')
-sw, sh = src.size  # 1080 x 1920
+# Font scale: base image is 944x410, reference design is ~489px wide
+SCALE = bw / 944
+FONT = r'C:\Windows\Fonts\msyh.ttc'
+def lf(s):
+    return ImageFont.truetype(FONT, max(1, int(s * SCALE)))
+font_sm = lf(18)
+font_lg = lf(36)
 
-# Crop upper body: top 8% to 60% for face+shoulders
-crop_top = int(sh * 0.08)
-crop_bottom = int(sh * 0.60)
-src_crop = src.crop((0, crop_top, sw, crop_bottom))
+draw = ImageDraw.Draw(base)
 
-# Resize to right side
-right_w = 435
-ratio = right_w / src_crop.width
-right_h = int(src_crop.height * ratio)
-if right_h < H:
-    ratio = H / src_crop.height
-    right_h = H
-    right_w = int(src_crop.width * ratio)
-right_img = src_crop.resize((right_w, right_h), RS)
+# Helper: erase a rect area by painting gradient color
+def erase_rect(x1, y1, x2, y2):
+    x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+    for px in range(max(0,x1), min(bw,x2)):
+        for py in range(max(0,y1), min(bh,y2)):
+            r = px / bw * 30 + 225
+            g = px / bw * 80 + 110
+            b = py / bh * 80 + 100
+            base.putpixel((px, py), (int(r)%256, int(g)%256, int(b)%256, 255))
 
-# Canvas with gradient bg
-canvas = Image.new('RGB', (W, H))
-draw = ImageDraw.Draw(canvas)
-for y in range(H):
-    r = int(255 - (y / H) * 40)
-    g = int(90 + (y / H) * 48)
-    b = int(110 + (y / H) * 50)
-    draw.line([(0, y), (W, y)], fill=(r, g, b))
+# ---- 1. Name: "Cindy" → "Yoko" ----
+ny = int(bh * 0.463)
+nx = int(22 * SCALE)
+nw = int(draw.textlength('Cindy', font=font_lg)) + int(8*SCALE)
+erase_rect(nx, ny, nx+nw, ny+int(40*SCALE))
+draw = ImageDraw.Draw(base)
+draw.text((nx, ny), 'Yoko', fill='#ffffff', font=font_lg)
 
-# Place photo on RIGHT side
-photo_x = W - right_w
-photo_y = (H - right_h) // 2
-if right_h > H:
-    crop_offset = (right_h - H) // 2
-    right_img_cropped = right_img.crop((0, crop_offset, right_w, crop_offset + H))
-    canvas.paste(right_img_cropped, (photo_x, 0))
-else:
-    canvas.paste(right_img, (photo_x, photo_y))
+# ---- 2. Desc line 1 ----
+d1y = int(bh * 0.585)
+old1 = '\u559c\u9759\u4e0d\u559c\u4e89\uff0c\u5fc3\u5b89\u5373\u5bcc\u8db3'
+new1 = '46\u5c81\u9500\u552e\u5c0f\u59d0\u59d9'
+w1 = int(draw.textlength(old1, font=font_sm)) + int(8*SCALE)
+erase_rect(int(18*SCALE), d1y, int(18*SCALE)+w1, d1y+int(24*SCALE))
+draw = ImageDraw.Draw(base)
+draw.text((int(18*SCALE), d1y), new1, fill='#ffffff', font=font_sm)
 
-# Dark overlay on left text area
-overlay = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-ov_draw = ImageDraw.Draw(overlay)
-for x in range(380):
-    alpha = int(180 * (1 - x / 380) * 0.5)
-    ov_draw.line([(x, 0), (x, H)], fill=(0, 0, 0, alpha))
-canvas = Image.alpha_composite(canvas.convert('RGBA'), overlay).convert('RGB')
-draw = ImageDraw.Draw(canvas)
+# ---- 3. Desc line 2 ----
+d2y = d1y + int(26*SCALE)
+old2 = '\u7cbe\u795e\u4e16\u754c\u7684\u9971\u6ee1\uff0c\u80dc\u4e8e\u4e00\u5207'
+new2 = '\u6e29\u6696\u77e5\u6027\uff0c\u671f\u5f85\u771f\u8bda\u76f8\u9047'
+w2 = int(draw.textlength(old2, font=font_sm)) + int(8*SCALE)
+erase_rect(int(18*SCALE), d2y, int(18*SCALE)+w2, d2y+int(24*SCALE))
+draw = ImageDraw.Draw(base)
+draw.text((int(18*SCALE), d2y), new2, fill='#ffffff', font=font_sm)
 
-# Fonts
-f_bold = ImageFont.truetype(r'C:/Windows/Fonts/msyhbd.ttc', 28)
-f_med = ImageFont.truetype(r'C:/Windows/Fonts/msyh.ttc', 16)
-f_sm = ImageFont.truetype(r'C:/Windows/Fonts/msyh.ttc', 14)
-f_btn = ImageFont.truetype(r'C:/Windows/Fonts/msyhbd.ttc', 16)
+# ---- 4. Tags ----
+ty = d2y + int(34*SCALE)
+old_tags = ['48\u5c81', '\u767d\u9886', '\u6c34\u74f6\u5ea7']
+new_tags = ['46\u5c81', '\u9500\u552e', '\u5929\u79e4\u5ea7']
+tx = int(20 * SCALE)
+gap = int(8 * SCALE)
+for ot, nt in zip(old_tags, new_tags):
+    otw = int(draw.textlength(ot, font=font_sm)) + int(18*SCALE)
+    th = int(28 * SCALE)
+    erase_rect(tx, ty, tx+otw, ty+th)
+    draw = ImageDraw.Draw(base)
+    ntw = int(draw.textlength(nt, font=font_sm)) + int(18*SCALE)
+    draw.rounded_rectangle([tx, ty, tx+ntw, ty+th], radius=int(14*SCALE),
+                           outline='#ffccb0', width=max(1,int(SCALE)))
+    draw.text((tx+int(9*SCALE), ty+int(4*SCALE)), nt, fill='#ffccb0', font=font_sm)
+    tx += ntw + gap
 
-def txtsize(text, font):
-    bbox = draw.textbbox((0, 0), text, font=font)
-    return bbox[2] - bbox[0], bbox[3] - bbox[1]
+# ---- 5. Replace right-side photo ----
+src_img = Image.open(PHOTO_SRC).convert('RGB')
+sw, sh = src_img.size
+print(f'Source: {sw}x{sh}')
 
-def txt(draw, x, y, text, font, fill):
-    draw.text((x, y), text, font=font, fill=fill)
+pleft = int(bw * 0.54) - int(5*SCALE)
+pw = bw - pleft + int(10*SCALE)
+ph = bh
 
-# Text
-txt(draw, 30, 24, '今日会员推荐', f_bold, 'white')
-txt(draw, 30, 64, '注重心灵富足的温柔女生', f_med, '#ffe0e0')
-txt(draw, 30, 100, '28岁  |  水瓶座  |  自由职业  |  杭州', f_sm, '#ffd0d0')
-txt(draw, 30, 132, '她相信真正的缘分，是灵魂的共振。期待一个', f_sm, '#ffc8c8')
-txt(draw, 30, 154, '能读懂她的你，一起书写温暖的故事。', f_sm, '#ffc8c8')
+aspect = pw / ph
+cw = sw
+ch = int(sw / aspect)
+if ch > sh:
+    ch = sh
+    cw = int(sh * aspect)
+cy1 = max(0, (sh - ch) // 2)
+cx1 = max(0, (sw - cw) // 2)
+crop = src_img.crop((cx1, cy1, cx1+cw, cy1+ch))
+photo = crop.resize((pw, ph), Image.LANCZOS)
+base.paste(photo.convert('RGBA'), (pleft, 0))
 
-# CTA button
-btn_x, btn_y, btn_w, btn_h = 30, 198, 140, 42
-draw.rounded_rectangle([btn_x, btn_y, btn_x+btn_w, btn_y+btn_h], radius=21, fill='white')
-bw, bh = txtsize('立即了解', f_btn)
-txt(draw, btn_x+(btn_w-bw)//2, btn_y+(btn_h-bh)//2-1, '立即了解', f_btn, '#ff5a6e')
-
-canvas.save(DST, quality=95)
-print(f'OK: {DST} ({canvas.size})')
+# ---- 6. Upscale to 750x320 ----
+final = base.resize((750, 320), Image.LANCZOS)
+final.convert('RGB').save(OUT, quality=95)
+print(f'Done: {OUT} (750x320)')
