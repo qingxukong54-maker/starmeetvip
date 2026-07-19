@@ -266,7 +266,8 @@
   /* ---------- 首页轮播（纯图片占位，无文字） ---------- */
   const DEFAULT_BANNERS = [
     { type: 'image', src: 'assets/images/banner-survey.png', link: 'https://wj.qq.com/s2/27344088/a696/' },
-    { type: 'image', src: 'assets/images/banner-cindy.png', link: 'member.html?id=9' }
+    { type: 'image', src: 'assets/images/banner-cindy.png', link: 'member.html?id=9' },
+    { type: 'image', src: 'assets/images/banner-yoko.png', link: 'member.html?id=8' }
   ];
 
   function buildSlide(b) {
