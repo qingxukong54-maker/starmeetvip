@@ -778,11 +778,12 @@
             return ta < tb ? 1 : -1;
           });
       };
-      const half = 3;
-      const females = byGender('女').slice(0, half);
-      const males = byGender('男').slice(0, half);
+      const NF = 3, NM = 2;
+      const females = byGender('女').slice(0, NF);
+      const males = byGender('男').slice(0, NM);
       const combined = [];
-      for (let i = 0; i < half; i++) {
+      const max = Math.max(NF, NM);
+      for (let i = 0; i < max; i++) {
         if (females[i]) combined.push(females[i]);
         if (males[i]) combined.push(males[i]);
       }
