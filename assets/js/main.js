@@ -393,6 +393,9 @@
     document.querySelectorAll('.activity-row').forEach(function (row) {
       let down = false, startX = 0, startScroll = 0, moved = false;
       row.addEventListener('pointerdown', function (e) {
+        // 点击链接/按钮时不要捕获指针，让 <a> 正常跳转
+        const target = e.target;
+        if (target.closest('a') || target.closest('button')) return;
         down = true; moved = false;
         startX = e.clientX; startScroll = row.scrollLeft;
         try { row.setPointerCapture(e.pointerId); } catch (_) {}
