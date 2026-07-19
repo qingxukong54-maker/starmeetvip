@@ -145,22 +145,23 @@
       }
     });
     document.querySelectorAll('.act-card > img').forEach(function (img, idx) {
+      var custom = img.getAttribute('data-custom');
       img.onerror = null;
-      img.src = coverURI(idx);
+      img.src = custom ? custom : coverURI(idx);
     });
   }
 
   /* ---------- 会员数据（数据驱动，?id=编号） ---------- */
   const RAW_MEMBERS = [
-    { id:1,  name:'林晓薇', gender:'女', img:47, age:28, city:'上海', district:'静安区', height:168, zodiac:'天蝎座', job:'外企市场', income:'20-30万', marriage:'未婚', education:'本科', housing:'有(无贷款)', car:'无', interests:'旅行、烘焙、看展、瑜伽、宠物', intro:'海归市场人，喜欢有规划、情绪稳定的人。工作之余爱旅行和烘焙，希望找一个能一起逛展、一起下厨的伴侣。真诚交友，非诚勿扰～' },
+    { id:1,  name:'Kelly', gender:'女', img:47, age:38, city:'福州', district:'', height:163, zodiac:'双鱼座', job:'无业游民', income:'0.3万', marriage:'未婚', education:'高中', housing:'无', car:'无', interests:'聊天', intro:'走别人的路，让别人无路可走', birth:'1986-12-10', blood_type:'AB型', weight:70, wechat:'15980276203', uid:'00001', photo:'', expect_gender:'男', expect_age:'18-65岁', expect_height:'140-180cm', expect_education:'不限', expect_marriage:'不限', expect_income:'40万', expect_marry_time:'随时', purpose:'真诚交友', expect_other:'看眼缘' },
     { id:2,  name:'苏曼妮', gender:'女', img:45, age:29, city:'上海', district:'浦东新区', height:170, zodiac:'双子座', job:'留学顾问', income:'30万以上', marriage:'未婚', education:'硕士', housing:'有(无贷款)', car:'有', interests:'旅行、红酒、话剧、宠物', intro:'海归留学顾问，阅人无数但依然相信爱情。喜欢有品位的约会，也享受独处的安静。' },
     { id:3,  name:'陈嘉怡', gender:'女', img:44, age:26, city:'杭州', district:'西湖区', height:165, zodiac:'处女座', job:'UI设计师', income:'10-20万', marriage:'未婚', education:'大专', housing:'租房', car:'无', interests:'插画、看展、咖啡、露营', intro:'文艺系UI设计师，周末爱逛展和露营。期待一个能一起发现生活小美好的你。' },
     { id:4,  name:'李梦琪', gender:'女', img:20, age:29, city:'成都', district:'锦江区', height:163, zodiac:'巨蟹座', job:'护士', income:'10-20万', marriage:'未婚', education:'本科', housing:'租房', car:'无', interests:'美食、追剧、瑜伽', intro:'成都小护士，温柔顾家。希望找一个踏实靠谱、会疼人的另一半。' },
     { id:5,  name:'周雅婷', gender:'女', img:41, age:31, city:'广州', district:'天河区', height:166, zodiac:'摩羯座', job:'高中教师', income:'20-30万', marriage:'未婚', education:'本科', housing:'有(无贷款)', car:'无', interests:'读书、园艺、旅行', intro:'人民教师，理性温和。喜欢有共同话题、能一起成长的人。' },
     { id:6,  name:'白思琪', gender:'女', img:32, age:26, city:'杭州', district:'滨江区', height:167, zodiac:'水瓶座', job:'自由插画师', income:'10-20万', marriage:'未婚', education:'本科', housing:'租房', car:'无', interests:'绘画、动漫、猫、旅行', intro:'自由插画师，养猫一只。喜欢安静也喜欢远方，想找个能读懂我画的人。' },
-    { id:7,  name:'赵欣怡', gender:'女', img:49, age:25, city:'深圳', district:'南山区', height:160, zodiac:'狮子座', job:'新媒体运营', income:'10-20万', marriage:'未婚', education:'本科', housing:'租房', car:'无', interests:'短视频、穿搭、美食', intro:'深圳新媒体女孩，热爱生活热爱分享。期待一个有趣灵魂来双向奔赴。' },
+    { id:7,  name:'熙', gender:'女', img:49, age:35, city:'福州', district:'', height:158, zodiac:'金牛座', job:'老师', income:'20万', marriage:'未婚', education:'本科', housing:'有(有贷款)', car:'有(无贷款)', interests:'美食 旅行 婚礼', intro:'兢兢业业的教育工作者', birth:'1990-04-13', blood_type:'其他', weight:55, wechat:'Elina熙', uid:'00007', photo:'assets/images/member-00007.jpg', expect_gender:'不限', expect_age:'45-55岁', expect_height:'170-180cm', expect_education:'本科', expect_marriage:'未婚', expect_income:'20万', expect_marry_time:'1年内', purpose:'真诚交友', expect_other:'真诚 上进 孝顺' },
     { id:32, name:'孙雨桐', gender:'女', img:33, age:27, city:'南京', district:'鼓楼区', height:164, zodiac:'双鱼座', job:'银行职员', income:'20-30万', marriage:'未婚', education:'硕士', housing:'有(无贷款)', car:'无', interests:'旅行、健身、电影', intro:'银行白领，自律爱运动。希望对方也热爱生活、积极向上。' },
-    { id:9,  name:'王梓涵', gender:'男', img:15, age:32, city:'北京', district:'朝阳区', height:172, zodiac:'射手座', job:'企业主管', income:'30万以上', marriage:'未婚', education:'硕士', housing:'有(有贷款)', car:'有', interests:'高尔夫、旅行、投资', intro:'互联网企业中层，理性务实。希望找一个独立、聊得来的伴侣。' },
+    { id:9,  name:'Cindy', gender:'女', img:15, age:48, city:'福州', district:'', height:167, zodiac:'水瓶座', job:'白领', income:'20-30万', marriage:'未婚', education:'本科', housing:'无', car:'无', interests:'旅行、音乐、看书、健身', intro:'喜静不喜争，心安即富足，精神世界的饱满胜于一切。', birth:'1978-01-24', blood_type:'AB型', weight:55, wechat:'Sindy233797', uid:'00009', photo:'assets/images/member-00009.jpg', expect_gender:'男', expect_age:'35-45岁', expect_height:'170-180cm', expect_education:'本科', expect_marriage:'离异', expect_income:'50万', expect_marry_time:'暂不考虑', purpose:'真诚交友', expect_other:'同频' },
     { id:10, name:'顾辰',   gender:'男', img:12, age:30, city:'北京', district:'海淀区', height:178, zodiac:'天秤座', job:'软件工程师', income:'30万以上', marriage:'未婚', education:'本科', housing:'有(无贷款)', car:'有', interests:'编程、登山、摄影', intro:'程序员但不宅，周末爱登山拍照。想找个能一起看世界的人。' },
     { id:11, name:'张沐阳', gender:'男', img:13, age:33, city:'深圳', district:'福田区', height:180, zodiac:'金牛座', job:'投资人', income:'30万以上', marriage:'未婚', education:'硕士', housing:'有(无贷款)', car:'有', interests:'金融、滑雪、红酒', intro:'投资人，看人很准。希望遇到一个真诚、有自己热爱的人。' },
     { id:12, name:'刘宇航', gender:'男', img:14, age:31, city:'上海', district:'徐汇区', height:175, zodiac:'双子座', job:'医生', income:'30万以上', marriage:'未婚', education:'博士', housing:'有(无贷款)', car:'有', interests:'医学研究、跑步、阅读', intro:'外科医生，忙但靠谱。期待一个理解我的节奏、温柔以待的人。' },
@@ -264,9 +265,8 @@
 
   /* ---------- 首页轮播（纯图片占位，无文字） ---------- */
   const DEFAULT_BANNERS = [
-    { type: 'gradient', bg: 'linear-gradient(135deg,#ff5a6e,#ff8a3d)' },
-    { type: 'gradient', bg: 'linear-gradient(135deg,#722ed1,#b37feb)' },
-    { type: 'gradient', bg: 'linear-gradient(135deg,#11998e,#38ef7d)' }
+    { type: 'image', src: 'assets/images/banner-survey.png', link: 'https://wj.qq.com/s2/27344088/a696/' },
+    { type: 'image', src: 'assets/images/banner-cindy.png', link: 'member.html?id=9' }
   ];
 
   function buildSlide(b) {
@@ -277,6 +277,10 @@
       const img = document.createElement('img');
       img.src = b.src; img.alt = 'banner'; img.className = 'banner-img';
       slide.appendChild(img);
+      if (b.link) {
+        slide.style.cursor = 'pointer';
+        slide.addEventListener('click', () => { window.location.href = b.link; });
+      }
     } else {
       slide.style.background = b.bg || '#ff5a6e';
     }
@@ -442,17 +446,16 @@
   /* ---------- 活动详情数据 ---------- */
   const ACTIVITIES = {
     '1': {
-      title: '周末单身派对 · 外滩源', cover: 0,
-      time: '07-20 14:00 - 18:00', loc: '上海 · 外滩源美术馆', joined: 128, price: '免费', priceNum: 0, status: '报名中',
-      intro: '一场属于单身青年的轻松派对。在外滩源的落地玻璃空间里，用游戏和音乐打破陌生感，认识同频的人。现场提供精酿、甜点与互动小游戏，拒绝尴尬的相亲式对坐，让相遇自然发生。',
+      title: '创始会员招募 填写问卷 加入华人社交圈 提升圈层', cover: 0, img: 'assets/images/banner-survey.png',
+      time: '07.19 - 08.15', loc: '线上活动', joined: 4, price: '免费', priceNum: 0, status: '报名中',
+      intro: '诚邀同频的你，共建真诚温暖的交友社区。首批创始会员享真人认证、人工审核、高质量会员匹配特权。我们坚信，只有真诚，才值得认真对待。扫码报名，遇见对的人。',
       schedule: [
-        { t: '14:00', x: '签到 · 自由交流，领取名牌与破冰卡' },
-        { t: '14:30', x: '破冰游戏：名字接龙 & 兴趣盲盒' },
-        { t: '15:30', x: '主题桌游 / 自由组队聊天' },
-        { t: '17:00', x: '心动互选 & 合影留念' }
+        { t: '01', x: '进入腾讯问卷，提交个人资料' },
+        { t: '02', x: '联系官方小助手，核实个人信息' },
+        { t: '03', x: '加入官方群聊，接收最新交友资讯' }
       ],
-      tips: ['请携带本人身份证签到', '活动费用含饮品与小食，不含交通', '现场禁止强迫加微信，尊重彼此边界', '报名后如需取消请提前 24 小时联系客服'],
-      participants: [['王','王梓涵'],['顾','顾辰'],['张','张沐阳'],['刘','刘宇航'],['李','李梦琪']]
+      tips: ['活动全程免费，请通过官方腾讯问卷报名，谨防任何收费诈骗', '报名后请留意官方小助手消息，及时加入群聊接收最新资讯'],
+      participants: [['C','Cindy'],['熙','熙'],['K','Kelly'],['Y','Yoko']]
     },
     '2': {
       title: '跨界交友晚宴 · 国贸', cover: 1,
@@ -527,7 +530,7 @@
     set('actPrice', a.price);
     set('actPriceFoot', a.price);
     const cover = document.getElementById('actCover');
-    if (cover) cover.src = coverURI(a.cover || 0);
+    if (cover) cover.src = a.img ? a.img : coverURI(a.cover || 0);
 
     const intro = document.getElementById('actIntro');
     if (intro) intro.textContent = a.intro;
@@ -556,8 +559,11 @@
       a.participants.forEach(p => {
         const item = document.createElement('a');
         item.className = 'psug-item';
-        item.href = 'member.html?id=' + (MEMBER_BY_NAME[p[1]] || '');
-        item.innerHTML = '<div class="psug-avatar"><img src="' + avatarURI(p[0]) + '" onerror="avatarFallback(this,\'' + p[0] + '\')"></div>' +
+        const mid = MEMBER_BY_NAME[p[1]] || '';
+        const mem = MEMBERS[mid];
+        item.href = mid ? ('member.html?id=' + mid) : 'javascript:void(0)';
+        const avatarSrc = (mem && mem.photo) ? mem.photo : avatarURI(p[0]);
+        item.innerHTML = '<div class="psug-avatar"><img src="' + avatarSrc + '" onerror="avatarFallback(this,\'' + p[0] + '\')"></div>' +
           '<div class="psug-name">' + p[1] + '</div>';
         parts.appendChild(item);
       });

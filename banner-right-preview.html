@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>右侧裁切图预览 × 3（第二套方案·仅渐变蒙层）</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background:#f5f6f8; display:flex; flex-direction:column; align-items:center;
+    min-height:100vh; font-family:-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif;
+    padding:20px; gap:24px;
+  }
+  .sec-title { font-size:13px; color:#666; font-weight:600; align-self:flex-start; max-width:780px; }
+  .row { display:flex; gap:16px; flex-wrap:wrap; justify-content:center; }
+
+  /* ===== 纯裁切图（不带蒙层，确认人物裁切） ===== */
+  .raw {
+    background:#fff; border-radius:12px; overflow:hidden;
+    box-shadow:0 3px 14px rgba(0,0,0,.12);
+  }
+  .raw img { display:block; width:217px; height:160px; object-fit:cover; }
+  .raw .cap { text-align:center; font-size:11px; color:#888; padding:6px; }
+
+  /* ===== 最终效果（裁切图 + 版本B蒙层 + 文字 + 按钮） ===== */
+  .final {
+    position:relative; width:375px; height:160px; border-radius:14px; overflow:hidden;
+    box-shadow:0 3px 14px rgba(0,0,0,.12);
+  }
+  /* 第二套方案：仅斜向渐变蒙层，无底部暗角 */
+  .final .overlay {
+    position:absolute; top:0; left:0; width:100%; height:100%; z-index:1;
+    background:linear-gradient(110deg, rgba(255,90,110,0.90) 0%, rgba(255,138,61,0.65) 42%, rgba(255,90,110,0.08) 72%, transparent 100%);
+  }
+  .final .photo {
+    position:absolute; top:0; right:0; width:58%; height:100%; z-index:0;
+    clip-path:polygon(28% 0%, 100% 0%, 100% 100%, 8% 100%);
+  }
+  .final .photo img { width:100%; height:100%; object-fit:cover; object-position:center; }
+  .final .content {
+    position:absolute; top:0; left:0; width:55%; height:100%;
+    padding:18px 14px 16px; z-index:2;
+    display:flex; flex-direction:column; justify-content:flex-start;
+  }
+  .final .badge {
+    align-self:flex-start; background:rgba(255,255,255,0.22); backdrop-filter:blur(10px);
+    color:#fff; font-size:10px; padding:3px 8px; border-radius:20px;
+    border:1px solid rgba(255,255,255,0.22); margin-bottom:4px;
+  }
+  .final .tagline { color:rgba(255,255,255,0.82); font-size:10px; letter-spacing:1.2px; margin-bottom:2px; }
+  .final .title { color:#fff; font-size:21px; font-weight:800; text-shadow:0 2px 10px rgba(0,0,0,0.2); }
+  .final .title em { font-style:normal; background:linear-gradient(135deg,#fffde7,#ffe082); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .final .subtitle { color:rgba(255,255,255,0.9); font-size:11.5px; line-height:1.45; margin-top:2px; }
+  .final .chiprow { display:flex; gap:6px; margin-top:auto; flex-wrap:wrap; }
+  .final .chip { background:rgba(255,255,255,0.17); color:#fff; font-size:10px; padding:3px 7px; border-radius:6px; border:1px solid rgba(255,255,255,0.18); }
+  .final .cta { position:absolute; right:14px; bottom:12px; z-index:3; background:linear-gradient(135deg,#fff,#fef7e8); color:#ff5a6e; font-size:11.5px; font-weight:700; padding:7px 14px; border-radius:20px; border:none; }
+  .final .cap { position:absolute; left:0; bottom:0; }
+
+  .hint { font-size:11px; color:#999; text-align:center; max-width:780px; }
+</style>
+</head>
+<body>
+
+  <div class="sec-title">① 纯裁切图（不带蒙层，确认人物半身/头部位置对不对）</div>
+  <div class="row">
+    <div class="raw"><img src="C:/Users/Administrator/WorkBuddy/Claw/assets/images/banner-right-yoko.png"><div class="cap">Yoko</div></div>
+    <div class="raw"><img src="C:/Users/Administrator/WorkBuddy/Claw/assets/images/banner-right-cindy.png"><div class="cap">Cindy</div></div>
+    <div class="raw"><img src="C:/Users/Administrator/WorkBuddy/Claw/assets/images/banner-right-xi.png"><div class="cap">熙</div></div>
+  </div>
+
+  <div class="sec-title">② 最终效果（裁切图 + 第二套方案蒙层：仅斜向渐变）</div>
+  <div class="row">
+    <!-- Yoko -->
+    <div class="final">
+      <div class="photo"><img src="C:/Users/Administrator/WorkBuddy/Claw/assets/images/banner-right-yoko.png"></div>
+      <div class="overlay"></div>
+      <div class="content">
+        <span class="badge">🔥 今日会员推荐</span>
+        <div class="tagline">STARMEET · 跨界交友</div>
+        <div class="title"><em>Yoko</em> · 福州</div>
+        <div class="subtitle">46岁销售小姐姐<br>温暖知性，期待真诚相遇</div>
+        <div class="chiprow"><span class="chip">46岁</span><span class="chip">销售</span><span class="chip">168cm</span></div>
+      </div>
+      <button class="cta">立即了解 →</button>
+    </div>
+    <!-- Cindy -->
+    <div class="final">
+      <div class="photo"><img src="C:/Users/Administrator/WorkBuddy/Claw/assets/images/banner-right-cindy.png"></div>
+      <div class="overlay"></div>
+      <div class="content">
+        <span class="badge">🔥 今日会员推荐</span>
+        <div class="tagline">STARMEET · 跨界交友</div>
+        <div class="title"><em>Cindy</em> · 福州</div>
+        <div class="subtitle">喜静不喜争，心安即富足<br>精神世界的饱满，胜于一切</div>
+        <div class="chiprow"><span class="chip">48岁</span><span class="chip">白领</span><span class="chip">水瓶座</span></div>
+      </div>
+      <button class="cta">立即了解 →</button>
+    </div>
+    <!-- 熙 -->
+    <div class="final">
+      <div class="photo"><img src="C:/Users/Administrator/WorkBuddy/Claw/assets/images/banner-right-xi.png"></div>
+      <div class="overlay"></div>
+      <div class="content">
+        <span class="badge">🔥 今日会员推荐</span>
+        <div class="tagline">STARMEET · 跨界交友</div>
+        <div class="title"><em>熙</em> · 福州</div>
+        <div class="subtitle">兢兢业业的教育工作者<br>热爱美食、旅行与婚礼策划</div>
+        <div class="chiprow"><span class="chip">35岁</span><span class="chip">老师</span><span class="chip">金牛座</span></div>
+      </div>
+      <button class="cta">立即了解 →</button>
+    </div>
+  </div>
+
+  <div class="hint">
+    三张图尺寸均为 435×320（2x 高清），即右侧 .photo-mask 区域的精确裁切版，人物位置与你当前轮播里一致。<br>
+    若需更高清（3x=652×480）或调整人物大小/位置，告诉我即可重新生成。
+  </div>
+
+</body>
+</html>

@@ -63,6 +63,25 @@
         <!-- 今日之星 -->
         <div class="section-title">今日之星 <a class="more" href="match.html">更多 →</a></div>
         <div class="star-row">
+          <!-- 今日之星固定3位：Cindy / 熙 / Yoko -->
+          <div class="star-card" onclick="goMember('Cindy')">
+            <div class="star-avatar">
+              <img src="assets/images/member-00009.jpg" onerror="avatarFallback(this,'C')">
+              <span class="online-dot"></span>
+            </div>
+            <div class="star-name">Cindy</div>
+            <div class="star-meta">48岁 · 福州</div>
+            <div class="star-job">白领</div>
+          </div>
+          <div class="star-card" onclick="goMember('熙')">
+            <div class="star-avatar">
+              <img src="assets/images/member-00007.jpg" onerror="avatarFallback(this,'熙')">
+              <span class="online-dot"></span>
+            </div>
+            <div class="star-name">熙</div>
+            <div class="star-meta">35岁 · 福州</div>
+            <div class="star-job">老师</div>
+          </div>
           <div class="star-card" onclick="goMember('Yoko')">
             <div class="star-avatar">
               <img src="assets/images/member-00008.jpg" onerror="avatarFallback(this,'Y')">
@@ -72,24 +91,6 @@
             <div class="star-meta">46岁 · 福州</div>
             <div class="star-job">销售</div>
           </div>
-          <div class="star-card" onclick="goMember('林晓薇')">
-            <div class="star-avatar">
-              <img src="https://i.pravatar.cc/200?img=47" onerror="avatarFallback(this,'林')">
-              <span class="online-dot"></span>
-            </div>
-            <div class="star-name">林晓薇</div>
-            <div class="star-meta">28岁 · 上海</div>
-            <div class="star-job">外企市场</div>
-          </div>
-          <div class="star-card" onclick="goMember('白思琪')">
-            <div class="star-avatar">
-              <img src="https://i.pravatar.cc/200?img=32" onerror="avatarFallback(this,'白')">
-              <span class="online-dot"></span>
-            </div>
-            <div class="star-name">白思琪</div>
-            <div class="star-meta">26岁 · 杭州</div>
-            <div class="star-job">自由插画师</div>
-          </div>
         </div>
 
         <!-- 最新嘉宾 -->
@@ -98,7 +99,19 @@
           <a class="more" href="match.html">更多 →</a>
         </div>
         <div class="member-list">
-          <!-- 卡片 0: Yoko -->
+          <!-- 最新嘉宾固定6名：Cindy / Yoko / 熙 / Kelly / 刘宇航 / 张沐阳 -->
+          <div class="member-card" onclick="goMember('Cindy')">
+            <div class="member-card-photo">
+              <img src="assets/images/member-00009.jpg" onerror="avatarFallback(this,'C')">
+            </div>
+            <div class="member-card-info">
+              <div class="row1"><div class="meta-name">Cindy</div></div>
+              <div class="row-birthjob"><span class="birth-year">1978年</span><span class="job">白领</span></div>
+              <div class="row2"><span>📍 福州</span><span>🎓 本科</span></div>
+              <div class="row2"><span>📏 167cm</span><span>💰 20-30万</span></div>
+              <div class="row3"><span></span></div>
+            </div>
+          </div>
           <div class="member-card" onclick="goMember('Yoko')">
             <div class="member-card-photo">
               <img src="assets/images/member-00008.jpg" onerror="avatarFallback(this,'Y')">
@@ -111,81 +124,51 @@
               <div class="row3"><span></span></div>
             </div>
           </div>
-          <!-- 卡片 1 -->
-          <div class="member-card" onclick="goMember('苏曼妮')">
+          <div class="member-card" onclick="goMember('熙')">
             <div class="member-card-photo">
-              <img src="https://i.pravatar.cc/300?img=45" onerror="avatarFallback(this,'苏')">
+              <img src="assets/images/member-00007.jpg" onerror="avatarFallback(this,'熙')">
             </div>
             <div class="member-card-info">
-              <div class="row1"><div class="meta-name">苏曼妮</div></div>
-              <div class="row-birthjob"><span class="birth-year">1995年</span><span class="job">留学顾问</span></div>
-              <div class="row2"><span>📍 上海</span><span>🎓 本科</span></div>
-              <div class="row2"><span>📏 168cm</span><span>💰 20-30万</span></div>
+              <div class="row1"><div class="meta-name">熙</div></div>
+              <div class="row-birthjob"><span class="birth-year">1990年</span><span class="job">老师</span></div>
+              <div class="row2"><span>📍 福州</span><span>🎓 本科</span></div>
+              <div class="row2"><span>📏 158cm</span><span>💰 20万</span></div>
               <div class="row3"><span></span></div>
             </div>
           </div>
-          <!-- 卡片 2 -->
-          <div class="member-card" onclick="goMember('陈嘉怡')">
+          <div class="member-card" onclick="goMember('Kelly')">
             <div class="member-card-photo">
-              <img src="https://i.pravatar.cc/300?img=44" onerror="avatarFallback(this,'陈')">
+              <img src="https://i.pravatar.cc/300?img=47" onerror="avatarFallback(this,'K')">
             </div>
             <div class="member-card-info">
-              <div class="row1"><div class="meta-name">陈嘉怡</div></div>
-              <div class="row-birthjob"><span class="birth-year">1998年</span><span class="job">UI设计师</span></div>
-              <div class="row2"><span>📍 杭州</span><span>🎓 大专</span></div>
-              <div class="row2"><span>📏 165cm</span><span>💰 10-20万</span></div>
+              <div class="row1"><div class="meta-name">Kelly</div></div>
+              <div class="row-birthjob"><span class="birth-year">1986年</span><span class="job">无业游民</span></div>
+              <div class="row2"><span>📍 福州</span><span>🎓 高中</span></div>
+              <div class="row2"><span>📏 163cm</span><span>💰 0.3万</span></div>
               <div class="row3"><span></span></div>
             </div>
           </div>
-          <!-- 卡片 3 -->
-          <div class="member-card" onclick="goMember('王梓涵')">
+          <div class="member-card" onclick="goMember('刘宇航')">
             <div class="member-card-photo">
-              <img src="https://i.pravatar.cc/300?img=15" onerror="avatarFallback(this,'王')">
+              <img src="https://i.pravatar.cc/300?img=14" onerror="avatarFallback(this,'刘')">
             </div>
             <div class="member-card-info">
-              <div class="row1"><div class="meta-name">王梓涵</div></div>
-              <div class="row-birthjob"><span class="birth-year">1992年</span><span class="job">企业主管</span></div>
-              <div class="row2"><span>📍 北京</span><span>🎓 硕士</span></div>
-              <div class="row2"><span>📏 172cm</span><span>💰 30万以上</span></div>
+              <div class="row1"><div class="meta-name">刘宇航</div></div>
+              <div class="row-birthjob"><span class="birth-year">1995年</span><span class="job">医生</span></div>
+              <div class="row2"><span>📍 上海</span><span>🎓 博士</span></div>
+              <div class="row2"><span>📏 175cm</span><span>💰 30万以上</span></div>
               <div class="row3"><span></span></div>
             </div>
           </div>
-          <!-- 卡片 4 -->
-          <div class="member-card" onclick="goMember('李梦琪')">
+          <div class="member-card" onclick="goMember('张沐阳')">
             <div class="member-card-photo">
-              <img src="https://i.pravatar.cc/300?img=20" onerror="avatarFallback(this,'李')">
+              <img src="https://i.pravatar.cc/300?img=13" onerror="avatarFallback(this,'张')">
             </div>
             <div class="member-card-info">
-              <div class="row1"><div class="meta-name">李梦琪</div></div>
-              <div class="row-birthjob"><span class="birth-year">1996年</span><span class="job">护士</span></div>
-              <div class="row2"><span>📍 成都</span><span>🎓 本科</span></div>
-              <div class="row2"><span>📏 163cm</span><span>💰 10-20万</span></div>
-              <div class="row3"><span></span></div>
-            </div>
-          </div>
-          <!-- 卡片 5 -->
-          <div class="member-card" onclick="goMember('周雅婷')">
-            <div class="member-card-photo">
-              <img src="https://i.pravatar.cc/300?img=41" onerror="avatarFallback(this,'周')">
-            </div>
-            <div class="member-card-info">
-              <div class="row1"><div class="meta-name">周雅婷</div></div>
-              <div class="row-birthjob"><span class="birth-year">1994年</span><span class="job">高中教师</span></div>
-              <div class="row2"><span>📍 广州</span><span>🎓 本科</span></div>
-              <div class="row2"><span>📏 166cm</span><span>💰 20-30万</span></div>
-              <div class="row3"><span></span></div>
-            </div>
-          </div>
-          <!-- 卡片 6 -->
-          <div class="member-card" onclick="goMember('赵欣怡')">
-            <div class="member-card-photo">
-              <img src="https://i.pravatar.cc/300?img=49" onerror="avatarFallback(this,'赵')">
-            </div>
-            <div class="member-card-info">
-              <div class="row1"><div class="meta-name">赵欣怡</div></div>
-              <div class="row-birthjob"><span class="birth-year">1999年</span><span class="job">新媒体运营</span></div>
-              <div class="row2"><span>📍 深圳</span><span>🎓 本科</span></div>
-              <div class="row2"><span>📏 160cm</span><span>💰 10-20万</span></div>
+              <div class="row1"><div class="meta-name">张沐阳</div></div>
+              <div class="row-birthjob"><span class="birth-year">1993年</span><span class="job">投资人</span></div>
+              <div class="row2"><span>📍 深圳</span><span>🎓 硕士</span></div>
+              <div class="row2"><span>📏 180cm</span><span>💰 30万以上</span></div>
               <div class="row3"><span></span></div>
             </div>
           </div>
@@ -197,34 +180,12 @@
           <a class="more" href="activity.html">更多活动 →</a>
         </div>
         <div class="activity-list activity-row">
-          <div class="activity-card" onclick="location.href='activity.html'">
-            <div class="activity-cover" style="background:linear-gradient(135deg,#ff5a6e,#ff8a3d);">
-              <span class="status-badge">报名中</span>
-            </div>
+          <div class="activity-card" onclick="location.href='activity-detail.html?id=1'">
+            <img class="activity-cover-img" src="assets/images/banner-survey.png" alt="创始会员招募">
             <div class="activity-info">
-              <div class="activity-title">周末单身派对 · 外滩源</div>
-              <div class="activity-countdown" data-end="1748000000000"><b>12</b>天 <b>08</b>时 <b>30</b>分 <b>15</b>秒</div>
-              <div class="activity-place">📍 上海 · 外滩源美术馆</div>
-            </div>
-          </div>
-          <div class="activity-card" onclick="location.href='activity.html'">
-            <div class="activity-cover" style="background:linear-gradient(135deg,#722ed1,#b37feb);">
-              <span class="status-badge">报名中</span>
-            </div>
-            <div class="activity-info">
-              <div class="activity-title">跨界交友晚宴 · 国贸</div>
-              <div class="activity-countdown" data-end="1748500000000"><b>17</b>天 <b>02</b>时 <b>11</b>分 <b>40</b>秒</div>
-              <div class="activity-place">📍 北京 · 国贸大酒店</div>
-            </div>
-          </div>
-          <div class="activity-card" onclick="location.href='activity.html'">
-            <div class="activity-cover" style="background:linear-gradient(135deg,#11998e,#38ef7d);">
-              <span class="status-badge">报名中</span>
-            </div>
-            <div class="activity-info">
-              <div class="activity-title">户外徒步相亲 · 西湖</div>
-              <div class="activity-countdown" data-end="1749000000000"><b>22</b>天 <b>14</b>时 <b>05</b>分 <b>02</b>秒</div>
-              <div class="activity-place">📍 杭州 · 西湖风景区</div>
+              <div class="activity-title">创始会员招募 加入华人社交圈</div>
+              <div class="activity-countdown">07.19 - 08.15 报名中</div>
+              <div class="activity-place">📍 线上活动</div>
             </div>
           </div>
         </div>

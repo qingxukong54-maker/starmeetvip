@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>今日之星轮播图 × 3</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background:#f5f6f8; display:flex; justify-content:center;
+    min-height:100vh; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB',sans-serif;
+    padding:12px;
+  }
+
+  .phone-frame {
+    width:375px; background:#f5f6f8;
+    overflow:hidden;
+  }
+  .topbar {
+    background:#fff; display:flex; align-items:center;
+    padding:10px 14px; border-bottom:1px solid #eee;
+  }
+  .logo { display:flex; align-items:center; gap:6px; margin-right:auto; font-weight:700; color:#333; font-size:15px; }
+  .logo i { color:#ff5a6e; }
+  .tabs { display:flex; gap:4px; }
+  .tab { font-size:13px; color:#888; padding:4px 8px; text-decoration:none; border-radius:6px; }
+  .tab.active { color:#ff5a6e; background:#fff0f2; font-weight:600; }
+  .safety-tip {
+    background:#fff7e6; color:#d48806; font-size:11.5px; padding:6px 14px;
+    display:flex; align-items:center; gap:4px;
+  }
+
+  /* ===== 轮播区 ===== */
+  .banner-carousel {
+    position:relative; border-radius:14px; overflow:hidden;
+    box-shadow:0 2px 8px rgba(0,0,0,.08); margin:12px 14px 0;
+  }
+  .banner-slide {
+    position:relative; width:100%; height:160px;
+    overflow:hidden; display:none;
+  }
+  .banner-slide.active { display:block; }
+  .banner-bg {
+    position:absolute;top:0;left:0;width:100%;height:100%;
+    object-fit:cover; object-position:center center;
+  }
+  .banner-overlay {
+    position:absolute;top:0;left:0;width:100%;height:100%;
+    background:
+      linear-gradient(110deg, rgba(255,90,110,0.90) 0%, rgba(255,138,61,0.65) 42%, rgba(255,90,110,0.08) 72%, transparent 100%),
+      linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.50) 100%);
+    z-index:1;
+  }
+
+  /* 右侧人物裁切 */
+  .photo-mask {
+    position:absolute; top:0; right:0; width:58%; height:100%; z-index:0;
+    clip-path:polygon(28% 0%, 100% 0%, 100% 100%, 8% 100%);
+    overflow:hidden;
+  }
+  .photo-mask img {
+    width:170%; height:180%;
+    object-fit:cover;
+    /* 每张图单独调定位 */
+  }
+
+  /* ---- Yoko 的定位（脸部近照，居中偏上） ---- */
+  .slide-yoko .photo-mask img {
+    object-position:45% 20%;
+    margin-left:-35%; margin-top:-22%;
+  }
+
+  /* ---- Cindy 的定位（古村落全身照，人物在左中部） ---- */
+  .slide-cindy .photo-mask img {
+    object-position:28% 35%;
+    margin-left:-42%; margin-top:-30%;
+  }
+
+  /* ---- 熙的定位（机场自拍，人在右半边） ---- */
+  .slide-xi .photo-mask img {
+    object-position:70% 25%;
+    margin-left:-55%; margin-top:-20%;
+  }
+
+  /* 文字内容 */
+  .content {
+    position:absolute; top:0; left:0;width:55%;height:100%;
+    padding:18px 14px 16px; z-index:2;
+    display:flex; flex-direction:column; justify-content:flex-start;
+  }
+  .badge-row { display:flex; gap:5px; margin-bottom:4px; }
+  .badge {
+    background:rgba(255,255,255,0.22); backdrop-filter:blur(10px);
+    color:#fff; font-size:10px; padding:3px 8px; border-radius:20px;
+    letter-spacing:0.4px; border:1px solid rgba(255,255,255,0.22);
+  }
+  .tagline {
+    color:rgba(255,255,255,0.82); font-size:10px; letter-spacing:1.2px;
+    margin-bottom:2px; font-weight:500;
+  }
+  .title {
+    color:#fff; font-size:21px; line-height:1.2; font-weight:800;
+    text-shadow:0 2px 10px rgba(0,0,0,0.2);
+  }
+  .title em { font-style:normal; background:linear-gradient(135deg,#fffde7,#ffe082); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .subtitle {
+    color:rgba(255,255,255,0.9); font-size:11.5px; line-height:1.45;
+    margin-top:2px; max-width:190px;
+  }
+  .info-bar { display:flex; gap:6px; margin-top:auto; flex-wrap:wrap; }
+  .chip {
+    background:rgba(255,255,255,0.17); backdrop-filter:blur(8px);
+    color:#fff; font-size:10px; padding:3px 7px; border-radius:6px;
+    border:1px solid rgba(255,255,255,0.18);
+  }
+
+  /* CTA 按钮 */
+  .cta-wrap { position:absolute; right:14px; bottom:12px; z-index:3; }
+  .cta-btn {
+    display:inline-flex; align-items:center; gap:4px;
+    background:linear-gradient(135deg,#fff,#fef7e8);
+    color:#ff5a6e; font-size:11.5px; font-weight:700; padding:7px 14px;
+    border-radius:20px; border:none; cursor:pointer;
+    box-shadow:0 3px 12px rgba(255,90,110,0.38), inset 0 1px 0 rgba(255,255,255,0.85);
+  }
+
+  /* 轮播指示器 & 切换按钮 */
+  .banner-dots {
+    position:absolute; left:50%; transform:translateX(-50%); bottom:8px; z-index:4;
+    display:flex; gap:6px;
+  }
+  .dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.45); cursor:pointer; transition:all .2s; }
+  .dot.active { background:#fff; width:20px; border-radius:4px; }
+
+  .nav-arrows {
+    position:absolute; top:0;left:0;width:100%;height:100%;
+    pointer-events:none; z-index:5;
+  }
+  .nav-arrow {
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:28px; height:28px; border-radius:50%;
+    background:rgba(255,255,255,0.30); backdrop-filter:blur(6px);
+    border:1px solid rgba(255,255,255,0.4); color:#fff;
+    font-size:13px; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; pointer-events:auto; transition:.15s;
+  }
+  .nav-arrow:hover { background:rgba(255,255,255,0.5); }
+  .nav-prev { left:6px; }
+  .nav-next { right:6px; }
+
+  /* 标签区 */
+  .label-row {
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    margin:14px 0 8px; font-size:11.5px; color:#888;
+  }
+  .label-num {
+    background:linear-gradient(135deg,#ff5a6e,#ff8a3d);
+    color:#fff; width:24px; height:24px; border-radius:50%;
+    display:inline-flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:700;
+  }
+  .label-name { font-weight:600; color:#333; }
+
+  .hint {
+    text-align:center; color:#bbb; font-size:11px; margin-top:8px; padding-bottom:16px;
+  }
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <header class="topbar">
+    <div class="logo"><i class="fas fa-heart"></i> StarMeet</div>
+    <nav class="tabs">
+      <a class="tab active" href="#">首页</a>
+      <a class="tab" href="#">找缘分</a>
+      <a class="tab" href="#">活动</a>
+      <a class="tab" href="#">会员</a>
+    </nav>
+  </header>
+  <div class="safety-tip">
+    <i class="fas fa-exclamation-triangle"></i> 警惕酒托饭托婚托借约会骗取消费，平台仅做资料展示
+  </div>
+
+  <!-- ========== 轮播 Banner ========== -->
+  <div class="banner-carousel">
+
+    <!-- Slide 1: Yoko -->
+    <div class="banner-slide active slide-yoko">
+      <img class="banner-bg" src="assets/images/member-00008.jpg" alt="">
+      <div class="banner-overlay"></div>
+      <div class="photo-mask"><img src="assets/images/member-00008.jpg" alt="Yoko"></div>
+      <div class="content">
+        <div class="badge-row"><span class="badge">🔥 今日会员推荐</span></div>
+        <div class="tagline">STARMEET · 跨界交友</div>
+        <div class="title"><em>Yoko</em> · 福州</div>
+        <div class="subtitle">46岁销售小姐姐<br>温暖知性，期待真诚相遇</div>
+        <div class="info-bar">
+          <span class="chip">46岁</span><span class="chip">销售</span><span class="chip">168cm</span>
+        </div>
+      </div>
+      <div class="cta-wrap">
+        <button class="cta-btn">立即了解 →</button>
+      </div>
+    </div>
+
+    <!-- Slide 2: Cindy -->
+    <div class="banner-slide slide-cindy">
+      <img class="banner-bg" src="assets/images/member-00009.jpg" alt="">
+      <div class="banner-overlay"></div>
+      <div class="photo-mask"><img src="assets/images/member-00009.jpg" alt="Cindy"></div>
+      <div class="content">
+        <div class="badge-row"><span class="badge">🔥 今日会员推荐</span></div>
+        <div class="tagline">STARMEET · 跨界交友</div>
+        <div class="title"><em>Cindy</em> · 福州</div>
+        <div class="subtitle">喜静不喜争，心安即富足<br>精神世界的饱满，胜于一切</div>
+        <div class="info-bar">
+          <span class="chip">48岁</span><span class="chip">白领</span><span class="chip">水瓶座</span>
+        </div>
+      </div>
+      <div class="cta-wrap">
+        <button class="cta-btn">立即了解 →</button>
+      </div>
+    </div>
+
+    <!-- Slide 3: 熙 -->
+    <div class="banner-slide slide-xi">
+      <img class="banner-bg" src="assets/images/member-00007.jpg" alt="">
+      <div class="banner-overlay"></div>
+      <div class="photo-mask"><img src="assets/images/member-00007.jpg" alt="熙"></div>
+      <div class="content">
+        <div class="badge-row"><span class="badge">🔥 今日会员推荐</span></div>
+        <div class="tagline">STARMEET · 跨界交友</div>
+        <div class="title"><em>熙</em> · 福州</div>
+        <div class="subtitle">兢兢业业的教育工作者<br>热爱美食、旅行与婚礼策划</div>
+        <div class="info-bar">
+          <span class="chip">35岁</span><span class="chip">老师</span><span class="chip">金牛座</span>
+        </div>
+      </div>
+      <div class="cta-wrap">
+        <button class="cta-btn">立即了解 →</button>
+      </div>
+    </div>
+
+    <!-- 导航箭头 -->
+    <div class="nav-arrows">
+      <button class="nav-arrow nav-prev" onclick="changeSlide(-1)">‹</button>
+      <button class="nav-arrow nav-next" onclick="changeSlide(1)">›</button>
+    </div>
+
+    <!-- 指示器 -->
+    <div class="banner-dots">
+      <span class="dot active" onclick="goSlide(0)"></span>
+      <span class="dot" onclick="goSlide(1)"></span>
+      <span class="dot" onclick="goSlide(2)"></span>
+    </div>
+  </div>
+
+  <!-- 当前显示标签 -->
+  <div class="label-row">
+    <span class="label-num" id="lblNum">1</span>
+    <span class="label-name" id="lblName">Yoko</span>
+    <span>/ 共 3 张</span>
+  </div>
+</div>
+
+<div class="hint">左右滑动或点击箭头切换 · Banner 尺寸 100%×160px</div>
+
+<script>
+let cur = 0;
+const total = 3;
+const names = ['Yoko', 'Cindy', '熙'];
+function goSlide(n){
+  cur = n;
+  update();
+}
+function changeSlide(d){
+  cur = (cur + d + total) % total;
+  update();
+}
+function update(){
+  document.querySelectorAll('.banner-slide').forEach((s,i)=>s.classList.toggle('active', i===cur));
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active', i===cur));
+  document.getElementById('lblNum').textContent = cur+1;
+  document.getElementById('lblName').textContent = names[cur];
+}
+// 自动播放
+setInterval(()=>changeSlide(1), 4000);
+// 触摸滑动
+let sx=0;
+const car=document.querySelector('.banner-carousel');
+car.addEventListener('touchstart', e=>sx=e.touches[0].clientX);
+car.addEventListener('touchend', e=>{
+  const dx=e.changedTouches[0].clientX-sx;
+  if(Math.abs(dx)>40) changeSlide(dx<0?1:-1);
+});
+</script>
+</body>
+</html>
