@@ -180,6 +180,7 @@
       gender: r.gender,
       img: r.img,
       photo: r.photo || '',
+      detailPhoto: r.detailPhoto || '',
       age: r.age,
       city: r.city,
       district: r.district || '',
