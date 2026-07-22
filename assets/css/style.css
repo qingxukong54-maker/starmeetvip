@@ -253,9 +253,10 @@ button { font-family: inherit; cursor: pointer; }
 .member-card-photo {
   position: relative;
   width: 110px;
+  height: 132px;
   flex-shrink: 0;
 }
-.member-card-photo img { width: 100%; height: 100%; min-height: 132px; object-fit: cover; }
+.member-card-photo img { width: 100%; height: 100%; object-fit: cover; }
 .member-card-info { flex: 1; padding: 12px 12px 10px; display: flex; flex-direction: column; }
 .member-card-info .row1 .meta-name { font-size: 16px; font-weight: 700; }
 .row-birthjob { display: flex; align-items: baseline; gap: 8px; margin: 4px 0; }

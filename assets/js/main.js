@@ -13,7 +13,7 @@
     // 客服昵称
     serviceName: 'StarMeet 客服小助手',
     // 客服二维码图片地址（请替换为您真实的客服微信二维码）
-    serviceQr: 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=starmeet_vip'
+    serviceQr: 'assets/images/service-qr.png'
   };
 
   /* ---------- 全局 App 对象 ---------- */
@@ -169,7 +169,7 @@
     { id:8,  name:'Yoko',   gender:'女', photo:'assets/images/member-00008.jpg', uid:'00008', updated:'2026-07-19', birth:'1979-10-01', age:46, blood_type:'O型', weight:60, city:'福州', district:'', height:168, zodiac:'天秤座', job:'销售', income:'10万', marriage:'离异', education:'本科', housing:'无', car:'无', wechat:'15959005052', interests:'美食', intro:'一个人', expect_gender:'男', expect_age:'55-65岁', expect_height:'170-180cm', expect_education:'大专', expect_marriage:'不限', expect_income:'190万', expect_marry_time:'1年内', purpose:'寻找结婚对象', expect_other:'一个人' },
     { id:15, name:'陈志远', gender:'男', img:15, age:52, city:'纽约', district:'', height:175, zodiac:'狮子座', job:'企业董事长', income:'30万以上', marriage:'离异', education:'本科', housing:'有(无贷款)', car:'有', interests:'高尔夫、阅读、旅行', intro:'沉稳务实的企业管理者，阅尽千帆更懂生活。希望遇到一位知性温柔的伴侣，一起慢享余生。', uid:'00015', updated:'2026-07-19', photo:'assets/images/member-00015.jpg', expect_gender:'女', expect_age:'40-55岁', expect_height:'160-175cm', expect_education:'本科', expect_marriage:'离异', expect_income:'不限', expect_marry_time:'1年内', purpose:'寻找结婚对象', expect_other:'真诚 温柔' },
     { id:16, name:'林浩然', gender:'男', img:16, age:50, city:'加利福尼亚州', district:'', height:178, zodiac:'天蝎座', job:'投资顾问', income:'30万以上', marriage:'未婚', education:'硕士', housing:'有(无贷款)', car:'有', interests:'金融、滑雪、红酒', intro:'华尔街背景的金融人士，理性而不失温度。期待一个独立、有想法的另一半，携手看世界。', uid:'00016', updated:'2026-07-19', photo:'assets/images/member-00016.jpg', expect_gender:'女', expect_age:'38-52岁', expect_height:'160-178cm', expect_education:'本科', expect_marriage:'不限', expect_income:'不限', expect_marry_time:'1-3年', purpose:'真诚交友', expect_other:'独立 有想法' },
-    { id:17, name:'Nora', gender:'女', img:17, age:47, city:'福州', district:'', height:162, zodiac:'射手座', job:'创业者', income:'30万', marriage:'离异', education:'本科', housing:'有(无贷款)', car:'无', interests:'绘画、音乐、阅读、电影、旅行', intro:'人生真的会突然变好。契机可能是任何一件你做的事，或许是充足的睡眠后醒来想起的一个梦，或许是在阳光下散步时的惊鸿一瞥，或许是你出于好奇去研究的某个小爱好，或许是某一页书。生活里的每个瞬间都在悄悄托举你，它们给你的祝福可能会过很久才会灵验，但你要相信它一定会来，所有你做的事都会织成命运，把你吹到合适的地方。', birth:'1978-11-25', blood_type:'O型', weight:48, wechat:'13860099826', uid:'00017', updated:'2026-07-22', photo:'assets/images/member-00017.jpeg', expect_gender:'男', expect_age:'35-65岁', expect_height:'不限', expect_education:'不限', expect_marriage:'不限', expect_income:'20万', expect_marry_time:'3年内', purpose:'寻找结婚对象', expect_other:'无不良嗜好' }
+    { id:17, name:'Nora', gender:'女', img:17, age:47, city:'福州', district:'', height:162, zodiac:'射手座', job:'创业者', income:'30万', marriage:'离异', education:'本科', housing:'有(无贷款)', car:'无', interests:'绘画、音乐、阅读、电影、旅行', intro:'人生真的会突然变好。契机可能是任何一件你做的事，或许是充足的睡眠后醒来想起的一个梦，或许是在阳光下散步时的惊鸿一瞥，或许是你出于好奇去研究的某个小爱好，或许是某一页书。生活里的每个瞬间都在悄悄托举你，它们给你的祝福可能会过很久才会灵验，但你要相信它一定会来，所有你做的事都会织成命运，把你吹到合适的地方。', birth:'1978-11-25', blood_type:'O型', weight:48, wechat:'13860099826', uid:'00017', updated:'2026-07-22', photo:'assets/images/member-00017.jpeg', detailPhoto:'assets/images/member-00017-detail.jpg', expect_gender:'男', expect_age:'35-65岁', expect_height:'不限', expect_education:'不限', expect_marriage:'不限', expect_income:'20万', expect_marry_time:'3年内', purpose:'寻找结婚对象', expect_other:'无不良嗜好' }
   ];
 
   function buildMember(r) {
@@ -634,9 +634,12 @@
 
     document.title = m.name + ' - StarMeet';
 
-    // 头像：优先使用真人照片，否则本地生成SVG
+    // 头像：优先使用详情页专用照片(detailPhoto)，其次photo，否则本地生成SVG
     box.onerror = null;
-    if (m.photo) {
+    if (m.detailPhoto) {
+      box.src = m.detailPhoto;
+      box.onerror = function () { this.src = m.photo || avatarURI(m.name); };
+    } else if (m.photo) {
       box.src = m.photo;
       box.onerror = function () { this.src = avatarURI(m.name); };
     } else {
