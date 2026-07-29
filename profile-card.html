@@ -229,27 +229,33 @@
       // 介绍
       document.getElementById('intro').textContent = m.intro || '这个人很神秘，等你来认识～';
 
-      // 生活照网格：仅当有独立的生活照(detailPhoto)且不与主图重复时才展示；去重后最多3张
+      // 生活照网格：只有 1 张照片时，同一张显示 2 张（避免区块空缺或撑满）；最多 3 张
       var photoSet = {};
       var uniquePhotos = [];
       [m.photo, m.detailPhoto].forEach(function (p) {
         if (p && !photoSet[p]) { photoSet[p] = 1; uniquePhotos.push(p); }
       });
-      // 如果只有1张且就是主图(photo)，说明没有额外生活照 → 隐藏整个区块
-      var hasExtraPhotos = uniquePhotos.length > 1 || (uniquePhotos.length === 1 && m.detailPhoto);
+      var displayPhotos = [];
+      if (uniquePhotos.length === 0) {
+        displayPhotos = [];
+      } else if (uniquePhotos.length === 1) {
+        displayPhotos = [uniquePhotos[0], uniquePhotos[0]]; // 仅 1 张 → 同张显示 2 张
+      } else {
+        displayPhotos = uniquePhotos.slice(0, 3);
+      }
       var secPhotos = document.getElementById('secPhotos');
       var grid = document.getElementById('photos');
-      if (!hasExtraPhotos) {
+      if (displayPhotos.length === 0) {
         if (secPhotos) secPhotos.style.display = 'none';
         if (grid) grid.style.display = 'none';
       } else {
-        grid.style.gridTemplateColumns = 'repeat(' + Math.min(uniquePhotos.length, 3) + ', 1fr)';
-        for (var i = 0; i < Math.min(uniquePhotos.length, 3); i++) {
+        grid.style.gridTemplateColumns = 'repeat(' + Math.min(displayPhotos.length, 3) + ', 1fr)';
+        displayPhotos.forEach(function (src) {
           var im = document.createElement('img');
-          im.src = uniquePhotos[i];
+          im.src = src;
           im.onerror = function () { this.style.visibility = 'hidden'; };
           grid.appendChild(im);
-        }
+        });
       }
 
       // Slogan
