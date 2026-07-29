@@ -229,15 +229,17 @@
       // 介绍
       document.getElementById('intro').textContent = m.intro || '这个人很神秘，等你来认识～';
 
-      // 生活照网格：有几张显示几张（去重，最多3张）
+      // 生活照网格：仅当有独立的生活照(detailPhoto)且不与主图重复时才展示；去重后最多3张
       var photoSet = {};
       var uniquePhotos = [];
       [m.photo, m.detailPhoto].forEach(function (p) {
         if (p && !photoSet[p]) { photoSet[p] = 1; uniquePhotos.push(p); }
       });
+      // 如果只有1张且就是主图(photo)，说明没有额外生活照 → 隐藏整个区块
+      var hasExtraPhotos = uniquePhotos.length > 1 || (uniquePhotos.length === 1 && m.detailPhoto);
       var secPhotos = document.getElementById('secPhotos');
       var grid = document.getElementById('photos');
-      if (uniquePhotos.length === 0) {
+      if (!hasExtraPhotos) {
         if (secPhotos) secPhotos.style.display = 'none';
         if (grid) grid.style.display = 'none';
       } else {
