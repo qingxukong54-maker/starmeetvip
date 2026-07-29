@@ -222,10 +222,21 @@
   window.MEMBERS = MEMBERS;
   window.MEMBER_LIST = MEMBER_LIST;
 
-  /* ---------- 跳转会员详情（兼容传姓名或编号） ---------- */
+  /* ---------- 会员查找（兼容：数字id / 5位补零uid / 姓名） ---------- */
+  function resolveMember(raw) {
+    if (!raw) return null;
+    if (MEMBERS[raw]) return MEMBERS[raw];            // 数字 id，如 "18"
+    const num = String(parseInt(raw, 10));
+    if (MEMBERS[num]) return MEMBERS[num];            // 去前导零 "00018" -> "18"
+    if (MEMBER_BY_NAME[raw]) return MEMBERS[MEMBER_BY_NAME[raw]]; // 姓名
+    return MEMBER_LIST.find(function (x) { return x.uid === raw; }) || null; // uid 精确匹配
+  }
+
+  /* ---------- 跳转会员详情（统一用 5 位补零 uid 作为链接，如 ?id=00018） ---------- */
   window.goMember = function (key) {
-    const id = MEMBER_BY_NAME[key] || key;
-    location.href = 'member.html?id=' + id;
+    const m = resolveMember(key);
+    const target = m ? m.uid : (key || '1');
+    location.href = 'member.html?id=' + target;
   };
 
   /* ---------- 喜欢按钮（主页嘉宾卡片） ---------- */
@@ -257,8 +268,8 @@
   /* ---------- 首页轮播（纯图片占位，无文字） ---------- */
   const DEFAULT_BANNERS = [
     { type: 'image', src: 'assets/images/banner-survey.png', link: 'https://wj.qq.com/s2/27344088/a696/' },
-    { type: 'image', src: 'assets/images/banner-cindy.png', link: 'member.html?id=9' },
-    { type: 'image', src: 'assets/images/banner-yoko.png', link: 'member.html?id=8' }
+    { type: 'image', src: 'assets/images/banner-cindy.png', link: 'member.html?id=00009' },
+    { type: 'image', src: 'assets/images/banner-yoko.png', link: 'member.html?id=00008' }
   ];
 
   function buildSlide(b) {
@@ -605,7 +616,7 @@
         item.className = 'psug-item';
         const mid = MEMBER_BY_NAME[p[1]] || '';
         const mem = MEMBERS[mid];
-        item.href = mid ? ('member.html?id=' + mid) : 'javascript:void(0)';
+        item.href = mem ? ('member.html?id=' + mem.uid) : 'javascript:void(0)';
         const avatarSrc = (mem && mem.photo) ? mem.photo : avatarURI(p[0]);
         item.innerHTML = '<div class="psug-avatar"><img src="' + avatarSrc + '" onerror="avatarFallback(this,\'' + p[0] + '\')"></div>' +
           '<div class="psug-name">' + p[1] + '</div>';
@@ -633,8 +644,8 @@
     const box = document.getElementById('pdpAvatar');
     if (!box) return; // 非会员详情页
     const params = new URLSearchParams(location.search);
-    const id = params.get('id') || '1';
-    const m = MEMBERS[id] || MEMBERS['1'];
+    const raw = (params.get('id') || '1').trim();
+    const m = resolveMember(raw) || MEMBERS['1'];
     if (!m) return;
 
     document.title = m.name + ' - StarMeet';
@@ -799,7 +810,7 @@
       combined.forEach(function (o) {
         const a = document.createElement('a');
         a.className = 'psug-item';
-        a.href = 'member.html?id=' + o.id;
+        a.href = 'member.html?id=' + o.uid;
         const av = document.createElement('div');
         av.className = 'psug-avatar';
         const im = document.createElement('img');
