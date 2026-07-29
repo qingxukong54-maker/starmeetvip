@@ -231,6 +231,7 @@
     if (MEMBER_BY_NAME[raw]) return MEMBERS[MEMBER_BY_NAME[raw]]; // 姓名
     return MEMBER_LIST.find(function (x) { return x.uid === raw; }) || null; // uid 精确匹配
   }
+  window.resolveMember = resolveMember;
 
   /* ---------- 跳转会员详情（统一用 5 位补零 uid 作为链接，如 ?id=00018） ---------- */
   window.goMember = function (key) {
