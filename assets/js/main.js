@@ -134,14 +134,14 @@
       var fbName = fbMatch ? fbMatch[1] : (img.getAttribute('alt') || '?');
       var name = fullName || fbName;
       // 该会员是否有真人照片（详情页照片）→ 列表也用同一张，由 CSS object-fit:cover 裁剪缩放
-      var mid = MEMBER_BY_NAME[name];
-      var mem = mid ? MEMBERS[mid] : null;
+      var mem = resolveMember(name) || null;
+      var avatarName = mem ? mem.name : name;
       if (mem && mem.photo) {
-        img.onerror = function () { this.onerror = null; this.src = avatarURI(name); };
+        img.onerror = function () { this.onerror = null; this.src = avatarURI(avatarName); };
         img.src = mem.photo;
       } else {
         img.onerror = null;
-        img.src = avatarURI(name);
+        img.src = avatarURI(avatarName);
       }
     });
     document.querySelectorAll('.act-card > img').forEach(function (img, idx) {
@@ -352,7 +352,7 @@
       const card = document.createElement('div');
       card.className = 'grid-card';
       card.setAttribute('data-gender', m.gender);
-      card.setAttribute('onclick', "goMember('" + m.name + "')");
+      card.setAttribute('onclick', "goMember('" + m.uid + "')");
       const img = document.createElement('img');
       img.onerror = function () { this.onerror = null; this.src = avatarURI(m.name); };
       img.src = m.photo ? m.photo : avatarURI(m.name);
@@ -615,8 +615,7 @@
       a.participants.forEach(p => {
         const item = document.createElement('a');
         item.className = 'psug-item';
-        const mid = MEMBER_BY_NAME[p[1]] || '';
-        const mem = MEMBERS[mid];
+        const mem = resolveMember(p[1]) || null;
         item.href = mem ? ('member.html?id=' + mem.uid) : 'javascript:void(0)';
         const avatarSrc = (mem && mem.photo) ? mem.photo : avatarURI(p[0]);
         item.innerHTML = '<div class="psug-avatar"><img src="' + avatarSrc + '" onerror="avatarFallback(this,\'' + p[0] + '\')"></div>' +
